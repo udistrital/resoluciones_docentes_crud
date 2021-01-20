@@ -2,6 +2,23 @@ version: '3.4'
 
 services: 
 
+  resoluciones_crud_api:
+
+    image: golang:1.15-alpine
+    container_name: ${API_NAME}
+    volumes:
+      - go_src:/go
+      - .:/go/src/${API_BASE_DIR}/${API_NAME}
+    environment:
+      - GO111MODULE=on
+    env_file: 
+      - .env
+    ports: 
+      - "${RESOLUCIONES_CRUD_HTTP_PORT}:${RESOLUCIONES_CRUD_HTTP_PORT}"  
+    working_dir: /go/src
+    command: sh -c 'cd ${API_BASE_DIR}/${API_NAME};go get -u github.com/beego/bee ;go get -v -u ./...; pwd;go mod init; bee run -downdoc=true -gendoc=true'
+
+
   data_base:
     container_name: ${RESOLUCIONES_LOCAL}
     image: postgres:10.15-alpine
