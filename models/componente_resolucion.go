@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/beego/beego/v2/client/orm"
+	"github.com/astaxie/beego/orm"
 )
 
 type ComponenteResolucion struct {
-	Id                        int                   `orm:"column(id);pk"`
+	Id                        int                   `orm:"column(id);pk;auto"`
 	Numero                    int                   `orm:"column(numero)"`
 	ResolucionId              *Resolucion           `orm:"column(resolucion_id);rel(fk)"`
 	Texto                     string                `orm:"column(texto)"`
@@ -54,7 +54,7 @@ func GetComponenteResolucionById(id int) (v *ComponenteResolucion, err error) {
 func GetAllComponenteResolucion(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(ComponenteResolucion))
+	qs := o.QueryTable(new(ComponenteResolucion)).RelatedSel()
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute

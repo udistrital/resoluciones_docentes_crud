@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS resoluciones.tipo_resolucion CASCADE;
+DROP TABLE IF EXISTS resoluciones.modificacion_vinculacion CASCADE;
+DROP TABLE IF EXISTS resoluciones.modificacion_resolucion CASCADE;
+DROP TABLE IF EXISTS resoluciones.resolucion_estado CASCADE;
+DROP TABLE IF EXISTS resoluciones.estado_resolucion CASCADE;
+DROP TABLE IF EXISTS resoluciones.componente_resolucion CASCADE;
+DROP TABLE IF EXISTS resoluciones.resolucion_vinculacion_docente CASCADE;
+DROP TABLE IF EXISTS resoluciones.vinculacion_docente CASCADE;
+DROP TABLE IF EXISTS resoluciones.dedicacion CASCADE;
+DROP TABLE IF EXISTS resoluciones.resolucion CASCADE;

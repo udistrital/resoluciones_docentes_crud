@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	beego "github.com/beego/beego/v2/server/web"
+	"github.com/astaxie/beego"
 )
 
 // DedicacionController operations for Dedicacion

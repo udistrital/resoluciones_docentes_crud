@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/beego/beego/v2/client/orm"
+	"github.com/astaxie/beego/orm"
 )
 
 type Resolucion struct {
-	Id                      int             `orm:"column(id);pk"`
+	Id                      int             `orm:"column(id);pk;auto"`
 	NumeroResolucion        string          `orm:"column(numero_resolucion)"`
 	FechaExpedicion         time.Time       `orm:"column(fecha_expedicion);type(timestamp without time zone);null"`
 	Vigencia                int             `orm:"column(vigencia)"`
@@ -63,7 +63,7 @@ func GetResolucionById(id int) (v *Resolucion, err error) {
 func GetAllResolucion(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(Resolucion))
+	qs := o.QueryTable(new(Resolucion)).RelatedSel()
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute

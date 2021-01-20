@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/beego/beego/v2/client/orm"
+	"github.com/astaxie/beego/orm"
 )
 
 type EstadoResolucion struct {
-	Id                int       `orm:"column(id);pk"`
+	Id                int       `orm:"column(id);pk;auto"`
 	FechaRegistro     time.Time `orm:"column(fecha_registro);type(timestamp without time zone)"`
 	NombreEstado      string    `orm:"column(nombre_estado)"`
 	Activo            bool      `orm:"column(activo);null"`

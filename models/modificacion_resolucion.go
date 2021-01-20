@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/beego/beego/v2/client/orm"
+	"github.com/astaxie/beego/orm"
 )
 
 type ModificacionResolucion struct {
-	Id                   int         `orm:"column(id);pk"`
+	Id                   int         `orm:"column(id);pk;auto"`
 	ResolucionNuevaId    *Resolucion `orm:"column(resolucion_nueva_id);rel(fk)"`
 	ResolucionAnteriorId *Resolucion `orm:"column(resolucion_anterior_id);rel(fk)"`
 	Activo               bool        `orm:"column(activo);null"`
@@ -51,7 +51,7 @@ func GetModificacionResolucionById(id int) (v *ModificacionResolucion, err error
 func GetAllModificacionResolucion(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(ModificacionResolucion))
+	qs := o.QueryTable(new(ModificacionResolucion)).RelatedSel()
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute

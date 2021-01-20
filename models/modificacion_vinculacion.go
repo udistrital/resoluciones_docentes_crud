@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/beego/beego/v2/client/orm"
+	"github.com/astaxie/beego/orm"
 )
 
 type ModificacionVinculacion struct {
-	Id                             int                     `orm:"column(id);pk"`
+	Id                             int                     `orm:"column(id);pk;auto"`
 	ModificacionResolucionId       *ModificacionResolucion `orm:"column(modificacion_resolucion_id);rel(fk)"`
 	VinculacionDocenteCanceladaId  *VinculacionDocente     `orm:"column(vinculacion_docente_cancelada_id);rel(fk)"`
 	VinculacionDocenteRegistradaId *VinculacionDocente     `orm:"column(vinculacion_docente_registrada_id);rel(fk)"`
@@ -53,7 +53,7 @@ func GetModificacionVinculacionById(id int) (v *ModificacionVinculacion, err err
 func GetAllModificacionVinculacion(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(ModificacionVinculacion))
+	qs := o.QueryTable(new(ModificacionVinculacion)).RelatedSel()
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute

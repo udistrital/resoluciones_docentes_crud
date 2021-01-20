@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/beego/beego/v2/client/orm"
+	"github.com/astaxie/beego/orm"
 )
 
 type TipoResolucion struct {
-	Id                   int       `orm:"column(id);pk"`
+	Id                   int       `orm:"column(id);pk;auto"`
 	NombreTipoResolucion string    `orm:"column(nombre_tipo_resolucion)"`
 	Descripcion          string    `orm:"column(descripcion);null"`
 	Activo               bool      `orm:"column(activo);null"`
