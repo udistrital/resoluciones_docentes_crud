@@ -1,0 +1,3 @@
+TRUNCATE TABLE resoluciones.estado_resolucion RESTART IDENTITY CASCADE;
+TRUNCATE TABLE resoluciones.tipo_resolucion RESTART IDENTITY CASCADE;
+TRUNCATE TABLE resoluciones.dedicacion RESTART IDENTITY CASCADE;
