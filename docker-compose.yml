@@ -28,8 +28,7 @@ services:
         - "${RESOLUCIONES_CRUD_PGPORT}:${RESOLUCIONES_CRUD_PGPORT}"        
     env_file: 
         - .env
-    networks: 
-        - back_end
+
 
 
 
