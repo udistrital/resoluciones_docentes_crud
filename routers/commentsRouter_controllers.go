@@ -51,6 +51,33 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
+	beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionCompletaController"] = append(beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionCompletaController"],
+		beego.ControllerComments{
+			Method:           "ResolucionTemplate",
+			Router:           "/resolucion-template/:dedicacion/:nivel/:periodo/:tipo",
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionCompletaController"] = append(beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionCompletaController"],
+		beego.ControllerComments{
+			Method:           "GetOne",
+			Router:           "/:idResolucion",
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionCompletaController"] = append(beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionCompletaController"],
+		beego.ControllerComments{
+			Method:           "Put",
+			Router:           "/:idResolucion",
+			AllowHTTPMethods: []string{"put"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 	beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:DedicacionController"] = append(beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:DedicacionController"],
 		beego.ControllerComments{
 			Method:           "Post",

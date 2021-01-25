@@ -188,6 +188,91 @@
                 }
             }
         },
+        "/contenido_resolucion/resolucion-template/{dedicacion}/{nivel}/{periodo}/{tipo}": {
+            "get": {
+                "tags": [
+                    "contenido_resolucion"
+                ],
+                "description": "get ResolucionCompleta by id",
+                "operationId": "ResolucionCompletaController.Get Template",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "dedicacion",
+                        "description": "nombre de la dedicacion",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResolucionCompleta"
+                        }
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/contenido_resolucion/{idResolucion}": {
+            "get": {
+                "tags": [
+                    "contenido_resolucion"
+                ],
+                "description": "get ResolucionCompleta by id",
+                "operationId": "ResolucionCompletaController.Get One",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "idResolucion",
+                        "description": "The key for staticblock",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResolucionCompleta"
+                        }
+                    },
+                    "403": {
+                        "description": ":idResolucion is empty"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "contenido_resolucion"
+                ],
+                "description": "update the ResolucionCompleta",
+                "operationId": "ResolucionCompletaController.Put",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "idResolucion",
+                        "description": "The id you want to update",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResolucionCompleta"
+                        }
+                    },
+                    "403": {
+                        "description": ":idResolucion is not int"
+                    }
+                }
+            }
+        },
         "/dedicacion/": {
             "get": {
                 "tags": [
@@ -1747,6 +1832,29 @@
         }
     },
     "definitions": {
+        "models.Articulo": {
+            "title": "Articulo",
+            "type": "object",
+            "properties": {
+                "Id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Numero": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Paragrafos": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Paragrafo"
+                    }
+                },
+                "Texto": {
+                    "type": "string"
+                }
+            }
+        },
         "models.ComponenteResolucion": {
             "title": "ComponenteResolucion",
             "type": "object",
@@ -1900,6 +2008,23 @@
                 }
             }
         },
+        "models.Paragrafo": {
+            "title": "Paragrafo",
+            "type": "object",
+            "properties": {
+                "Id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Numero": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Texto": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Resolucion": {
             "title": "Resolucion",
             "type": "object",
@@ -1969,6 +2094,41 @@
                 "VigenciaCarga": {
                     "type": "integer",
                     "format": "int64"
+                }
+            }
+        },
+        "models.ResolucionCompleta": {
+            "title": "ResolucionCompleta",
+            "type": "object",
+            "properties": {
+                "Articulos": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Articulo"
+                    }
+                },
+                "Consideracion": {
+                    "type": "string"
+                },
+                "Id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Numero": {
+                    "type": "string"
+                },
+                "Preambulo": {
+                    "type": "string"
+                },
+                "Titulo": {
+                    "type": "string"
+                },
+                "Vigencia": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Vinculacion": {
+                    "$ref": "#/definitions/models.ResolucionVinculacionDocente"
                 }
             }
         },

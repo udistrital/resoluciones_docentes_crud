@@ -24,12 +24,13 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.7.1 // indirect
+	github.com/udistrital/administrativa_crud_api v0.0.0-20210104192518-d8e2b847c9c0
 	github.com/udistrital/utils_oas v0.0.0-20201230194626-bf49441f7130
-	go.starlark.net v0.0.0-20210121225809-cea917ab6e0f // indirect
+	go.starlark.net v0.0.0-20210122194613-f935de8d11ef // indirect
 	golang.org/x/arch v0.0.0-20210105144330-cfa462d59626 // indirect
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad // indirect
 	golang.org/x/net v0.0.0-20210119194325-5f4716e94777 // indirect
-	golang.org/x/sys v0.0.0-20210119212857-b64e53b001e4 // indirect
+	golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c // indirect
 	golang.org/x/text v0.3.5 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect

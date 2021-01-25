@@ -40,6 +40,12 @@ func init() {
 			),
 		),
 
+		beego.NSNamespace("/contenido_resolucion",
+			beego.NSInclude(
+				&controllers.ResolucionCompletaController{},
+			),
+		),
+
 		beego.NSNamespace("/estado_resolucion",
 			beego.NSInclude(
 				&controllers.EstadoResolucionController{},
