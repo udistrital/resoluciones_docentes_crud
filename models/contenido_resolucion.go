@@ -2,9 +2,9 @@ package models
 
 import (
 	"fmt"
-	"strconv"
-
+	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
+	"strconv"
 )
 
 type Paragrafo struct {
@@ -31,37 +31,47 @@ type ResolucionCompleta struct {
 	Titulo        string
 }
 
-func GetOneResolucionCompleta(idResolucion string) (resolucion ResolucionCompleta) {
+func GetOneResolucionCompleta(idResolucion string) (resolucion ResolucionCompleta, outputError map[string]interface{}) {
+	defer func() {
+		if err := recover(); err != nil {
+			outputError = map[string]interface{}{"funcion": "/GetOneResolucionCompleta", "err": err, "status": "500"}
+			//panic(outputError)
+			return
+		}
+	}()
+
 	o := orm.NewOrm()
-	var temp []Resolucion
 	idRes, _ := strconv.Atoi(idResolucion)
 
-	_, err := o.QueryTable("resolucion").Filter("id", idRes).All(&temp)
-	if err == nil {
-		fmt.Println("Consulta exitosa")
+	var temp []Resolucion
+	if _, err := o.QueryTable("resolucion").Filter("id", idRes).All(&temp); err != nil {
+		logs.Error(err)
+		outputError = map[string]interface{}{"funcion": "/GetOneResolucionCompleta1", "err": err.Error(), "status": "500"}
+		return resolucion, outputError
+
 	}
 
 	resolucionCompleta := ResolucionCompleta{Id: temp[0].Id, Consideracion: temp[0].ConsideracionResolucion, Preambulo: temp[0].PreambuloResolucion, Vigencia: temp[0].Vigencia, Numero: temp[0].NumeroResolucion, Titulo: temp[0].Titulo}
 
 	var arts []ComponenteResolucion
-	_, err2 := o.QueryTable("componente_resolucion").Filter("resolucion_id", idRes).Filter("tipo_componente", "Articulo").OrderBy("numero").All(&arts)
-	if err2 == nil {
-		fmt.Println("Consulta exitosa")
+	if _, err := o.QueryTable("componente_resolucion").Filter("resolucion_id", idRes).Filter("tipo_componente", "Articulo").OrderBy("numero").All(&arts); err != nil {
+		logs.Error(err)
+		outputError = map[string]interface{}{"funcion": "/GetOneResolucionCompleta2", "err": err.Error(), "status": "500"}
+		return resolucion, outputError
 	}
 
 	var articulos []Articulo
-
 	for _, art := range arts {
 		articulo := Articulo{Id: art.Id, Numero: art.Numero, Texto: art.Texto}
 
 		var pars []ComponenteResolucion
-		_, err3 := o.QueryTable("componente_resolucion").Filter("resolucion_id", idRes).Filter("tipo_componente", "Paragrafo").Filter("componente_padre", articulo.Id).OrderBy("numero").All(&pars)
-		if err3 == nil {
-			fmt.Println("Consulta exitosa")
+		if _, err := o.QueryTable("componente_resolucion").Filter("resolucion_id", idRes).Filter("tipo_componente", "Paragrafo").Filter("componente_padre", articulo.Id).OrderBy("numero").All(&pars); err != nil {
+			logs.Error(err)
+			outputError = map[string]interface{}{"funcion": "/GetOneResolucionCompleta3", "err": err.Error(), "status": "500"}
+			return resolucion, outputError
 		}
 
 		var paragrafos []Paragrafo
-
 		for _, par := range pars {
 			paragrafo := Paragrafo{Id: par.Id, Numero: par.Numero, Texto: par.Texto}
 			paragrafos = append(paragrafos, paragrafo)
@@ -72,46 +82,79 @@ func GetOneResolucionCompleta(idResolucion string) (resolucion ResolucionComplet
 		articulos = append(articulos, articulo)
 	}
 	resolucionCompleta.Articulos = articulos
-	return resolucionCompleta
+	return resolucionCompleta, nil //revisar
 }
 
-func UpdateResolucionCompletaById(m *ResolucionCompleta) (err error) {
+func UpdateResolucionCompletaById(m *ResolucionCompleta) (outputError map[string]interface{}) {
+	defer func() {
+		if err := recover(); err != nil {
+			outputError = map[string]interface{}{"funcion": "/UpdateResolucionCompletaById", "err": err, "status": "500"}
+			return
+		}
+	}()
 	o := orm.NewOrm()
 	v := Resolucion{Id: m.Id}
-	if err = o.Read(&v); err == nil {
+	if err := o.Read(&v); err == nil {
 		v.NumeroResolucion = m.Numero
 		v.Titulo = m.Titulo
-		_, err = o.Update(&v)
+
+		if _, err := o.Update(&v); err != nil {
+			logs.Error(err)
+			outputError = map[string]interface{}{"funcion": "/UpdateResolucionCompletaById1", "err": err.Error(), "status": "500"}
+			return
+		}
 	} else {
+		logs.Error(err)
+		outputError = map[string]interface{}{"funcion": "/UpdateResolucionCompletaById2", "err": err.Error(), "status": "500"}
 		return
 	}
 	idResolucionStr := strconv.Itoa(m.Id)
 	r := m.Vinculacion
 	fmt.Println(r.Id)
 	a := ResolucionVinculacionDocente{Id: r.Id}
-	if err = o.Read(&a); err == nil {
-		_, err = o.Update(&r)
+	if err := o.Read(&a); err == nil {
+		if _, err = o.Update(&r); err != nil {
+			logs.Error(err)
+			outputError = map[string]interface{}{"funcion": "/UpdateResolucionCompletaById3", "err": err.Error(), "status": "500"}
+			return
+		}
 	} else {
+		logs.Error(err)
+		outputError = map[string]interface{}{"funcion": "/UpdateResolucionCompletaById4", "err": err.Error(), "status": "500"}
 		return
 	}
-	if err = o.Read(&v); err == nil {
+	if err := o.Read(&v); err == nil {
 		v.ConsideracionResolucion = m.Consideracion
 		v.PreambuloResolucion = m.Preambulo
 		v.NumeroResolucion = m.Numero
 		fmt.Println(v)
 		if err := UpdateResolucionById(&v); err != nil {
+			logs.Error(err)
+			outputError = map[string]interface{}{"funcion": "/UpdateResolucionCompletaById", "err": err.Error(), "status": "500"}
+			return
 		}
 
-		resolucionCompleta := GetOneResolucionCompleta(idResolucionStr)
+		resolucionCompleta, err := GetOneResolucionCompleta(idResolucionStr)
+		if err != nil {
+			logs.Error(err)
+			outputError = map[string]interface{}{"funcion": "/UpdateResolucionCompletaById", "err": err, "status": "500"}
+			return
+		}
 
 		for _, articulo := range resolucionCompleta.Articulos {
 			if articulo.Paragrafos != nil {
 				for _, paragrafo := range articulo.Paragrafos {
 					if err := DeleteComponenteResolucion(paragrafo.Id); err != nil {
+						logs.Error(err)
+						outputError = map[string]interface{}{"funcion": "/UpdateResolucionCompletaById", "err": err.Error(), "status": "500"}
+						return
 					}
 				}
 			}
 			if err := DeleteComponenteResolucion(articulo.Id); err != nil {
+				logs.Error(err)
+				outputError = map[string]interface{}{"funcion": "/UpdateResolucionCompletaById", "err": err.Error(), "status": "500"}
+				return
 			}
 		}
 
@@ -121,36 +164,34 @@ func UpdateResolucionCompletaById(m *ResolucionCompleta) (err error) {
 				if articulo.Paragrafos != nil {
 					for indexParagrafo, paragrafo := range articulo.Paragrafos {
 						componenteParagrafo := ComponenteResolucion{ResolucionId: &Resolucion{Id: m.Id}, Texto: paragrafo.Texto, Numero: indexParagrafo + 1, TipoComponente: "Paragrafo", ComponenteResolucionPadre: &ComponenteResolucion{Id: componenteArticulo.Id}}
-						if _, err := AddComponenteResolucion(&componenteParagrafo); err == nil {
-
+						if _, err := AddComponenteResolucion(&componenteParagrafo); err != nil {
+							logs.Error(err)
+							outputError = map[string]interface{}{"funcion": "/UpdateResolucionCompletaById2", "err": err.Error(), "status": "500"}
+							return
 						}
 					}
 				}
+			} else {
+				logs.Error(err)
+				outputError = map[string]interface{}{"funcion": "/UpdateResolucionCompletaById2", "err": err.Error(), "status": "500"}
+				return
 			}
 		}
+	} else {
+		logs.Error(err)
+		outputError = map[string]interface{}{"funcion": "/UpdateResolucionCompletaById", "err": err.Error(), "status": "500"}
+		return
 	}
 	return
 }
 
-func GetTemplateResolucion(dedicacion, nivel, periodo, tipo string) (res ResolucionCompleta) {
+// no se usaba periodo y tipo entonces se eliminaron
+//func GetTemplateResolucion(dedicacion, nivel, periodo, tipo string) (res ResolucionCompleta, err error) {
+func GetTemplateResolucion(dedicacion string, nivel string) (res ResolucionCompleta, err error) {
 	var resolucion ResolucionCompleta
 	var articulos []Articulo
 	var articulo Articulo
 	var paragrafo Paragrafo
-	//var vigencia, _, _ = time.Now().Date()
-	//var accion string
-	//var periodoStr string
-	//var nombreDedicacion string
-	/*
-		switch periodo {
-		case "1":
-			periodoStr = "primer"
-		case "2":
-			periodoStr = "segundo"
-		case "3":
-			periodoStr = "tercer"
-		}
-	*/
 
 	switch dedicacion {
 	case "HCP":
@@ -437,5 +478,5 @@ func GetTemplateResolucion(dedicacion, nivel, periodo, tipo string) (res Resoluc
 
 	resolucion.Articulos = articulos
 
-	return resolucion
+	return resolucion, nil
 }

@@ -3,10 +3,10 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-	"strconv"
-
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
 	"github.com/udistrital/resoluciones_crud/models"
+	"strconv"
 )
 
 type ResolucionCompletaController struct {
@@ -22,19 +22,25 @@ func (c *ResolucionCompletaController) URLMapping() {
 // GetOne ...
 // @Title Get Template
 // @Description get ResolucionCompleta by id
-// @Param	dedicacion	path 	string	true		"nombre de la dedicacion"
+// @Param	dedicacion	path 	string	true		"Nombre de la dedicacion (HCP, HCH ...)"
+// @Param	nivel	path 	string	true		"Nivel de la dedicacion (PEGRADO, POSGRADO ....)"
 // @Success 200 {object} models.ResolucionCompleta
 // @Failure 403
-// @router /resolucion-template/:dedicacion/:nivel/:periodo/:tipo [get]
+// @router /resolucion-template/:dedicacion/:nivel [get]
 func (c *ResolucionCompletaController) ResolucionTemplate() {
+
+	defer c.errorControl()
+
 	dedicacion := c.Ctx.Input.Param(":dedicacion")
 	nivel := c.Ctx.Input.Param(":nivel")
-	periodo := c.Ctx.Input.Param(":periodo")
-	tipo := c.Ctx.Input.Param(":tipo")
-	fmt.Println("dedicacion", dedicacion, nivel, tipo, periodo)
-	resolucion := models.GetTemplateResolucion(dedicacion, nivel, periodo, tipo)
-	c.Ctx.Output.SetStatus(201)
-	c.Data["json"] = resolucion
+
+	fmt.Println("dedicacion", dedicacion, nivel)
+	resolucion, err := models.GetTemplateResolucion(dedicacion, nivel)
+	if err != nil {
+		panic(err)
+	} else {
+		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": resolucion}
+	}
 	c.ServeJSON()
 }
 
@@ -46,10 +52,17 @@ func (c *ResolucionCompletaController) ResolucionTemplate() {
 // @Failure 403 :idResolucion is empty
 // @router /:idResolucion [get]
 func (c *ResolucionCompletaController) GetOne() {
+
+	defer c.errorControl()
+
 	idResolucion := c.Ctx.Input.Param(":idResolucion")
-	resolucion := models.GetOneResolucionCompleta(idResolucion)
-	c.Ctx.Output.SetStatus(201)
-	c.Data["json"] = resolucion
+	resolucion, err := models.GetOneResolucionCompleta(idResolucion)
+
+	if err != nil {
+		panic(err)
+	} else {
+		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": resolucion}
+	}
 	c.ServeJSON()
 }
 
@@ -61,18 +74,37 @@ func (c *ResolucionCompletaController) GetOne() {
 // @Failure 403 :idResolucion is not int
 // @router /:idResolucion [put]
 func (c *ResolucionCompletaController) Put() {
+	defer c.errorControl()
+
 	idResolucionStr := c.Ctx.Input.Param(":idResolucion")
 	idResolucion, _ := strconv.Atoi(idResolucionStr)
 	v := models.ResolucionCompleta{Id: idResolucion}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if err := models.UpdateResolucionCompletaById(&v); err == nil {
-			c.Data["json"] = "OK"
+			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": ""}
 		} else {
-			c.Data["json"] = err.Error()
+			panic(err)
 		}
 	} else {
-		fmt.Println(err.Error())
-		c.Data["json"] = err.Error()
+		//yo defino
+		logs.Error(err)
+		outputError := map[string]interface{}{"funcion": "/Put", "err": err.Error(), "status": "500"}
+		panic(outputError)
 	}
+
 	c.ServeJSON()
+}
+
+func (c *ResolucionCompletaController) errorControl() {
+	if err := recover(); err != nil {
+		logs.Error(err)
+		localError := err.(map[string]interface{})
+		c.Data["mesaage"] = (beego.AppConfig.String("appname") + "/" + "ResolucionCompletaController" + "/" + (localError["funcion"]).(string))
+		c.Data["data"] = (localError["err"])
+		if status, ok := localError["status"]; ok {
+			c.Abort(status.(string))
+		} else {
+			c.Abort("404")
+		}
+	}
 }

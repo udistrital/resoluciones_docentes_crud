@@ -54,7 +54,7 @@ func init() {
 	beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionCompletaController"] = append(beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionCompletaController"],
 		beego.ControllerComments{
 			Method:           "ResolucionTemplate",
-			Router:           "/resolucion-template/:dedicacion/:nivel/:periodo/:tipo",
+			Router:           "/resolucion-template/:dedicacion/:nivel",
 			AllowHTTPMethods: []string{"get"},
 			MethodParams:     param.Make(),
 			Filters:          nil,

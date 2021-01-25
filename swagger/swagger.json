@@ -188,7 +188,7 @@
                 }
             }
         },
-        "/contenido_resolucion/resolucion-template/{dedicacion}/{nivel}/{periodo}/{tipo}": {
+        "/contenido_resolucion/resolucion-template/{dedicacion}/{nivel}": {
             "get": {
                 "tags": [
                     "contenido_resolucion"
@@ -199,7 +199,14 @@
                     {
                         "in": "path",
                         "name": "dedicacion",
-                        "description": "nombre de la dedicacion",
+                        "description": "Nombre de la dedicacion (HCP, HCH ...)",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "nivel",
+                        "description": "Nivel de la dedicacion (PEGRADO, POSGRADO ....)",
                         "required": true,
                         "type": "string"
                     }
