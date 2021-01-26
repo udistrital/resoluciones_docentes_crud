@@ -86,7 +86,6 @@ func (c *ResolucionCompletaController) Put() {
 			panic(err)
 		}
 	} else {
-		//yo defino
 		logs.Error(err)
 		outputError := map[string]interface{}{"funcion": "/Put", "err": err.Error(), "status": "500"}
 		panic(outputError)
