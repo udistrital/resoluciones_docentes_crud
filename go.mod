@@ -26,7 +26,7 @@ require (
 	github.com/spf13/viper v1.7.1 // indirect
 	github.com/udistrital/administrativa_crud_api v0.0.0-20210104192518-d8e2b847c9c0
 	github.com/udistrital/utils_oas v0.0.0-20201230194626-bf49441f7130
-	go.starlark.net v0.0.0-20210122194613-f935de8d11ef // indirect
+	go.starlark.net v0.0.0-20210125193508-28488fade247 // indirect
 	golang.org/x/arch v0.0.0-20210105144330-cfa462d59626 // indirect
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad // indirect
 	golang.org/x/net v0.0.0-20210119194325-5f4716e94777 // indirect

@@ -64,6 +64,12 @@ func init() {
 			),
 		),
 
+		beego.NSNamespace("/resolucion-vinculacion",
+			beego.NSInclude(
+				&controllers.ResolucionVinculacionController{},
+			),
+		),
+
 		beego.NSNamespace("/vinculacion_docente",
 			beego.NSInclude(
 				&controllers.VinculacionDocenteController{},

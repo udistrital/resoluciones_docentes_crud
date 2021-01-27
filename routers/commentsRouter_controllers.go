@@ -303,6 +303,42 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
+	beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionVinculacionController"] = append(beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionVinculacionController"],
+		beego.ControllerComments{
+			Method:           "GetAll",
+			Router:           "/",
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionVinculacionController"] = append(beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionVinculacionController"],
+		beego.ControllerComments{
+			Method:           "GetAllAprobada",
+			Router:           "/Aprobada",
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionVinculacionController"] = append(beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionVinculacionController"],
+		beego.ControllerComments{
+			Method:           "GetAllExpedidasVigenciaPeriodo",
+			Router:           "/expedidas_vigencia_periodo",
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionVinculacionController"] = append(beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionVinculacionController"],
+		beego.ControllerComments{
+			Method:           "GetAllExpedidasVigenciaPeriodoVinculacion",
+			Router:           "/expedidas_vigencia_periodo_vinculacion",
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 	beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionEstadoController"] = append(beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionEstadoController"],
 		beego.ControllerComments{
 			Method:           "Post",
