@@ -3,10 +3,12 @@ package controllers
 import (
 	"errors"
 	"fmt"
+	_ "fmt"
+	"strings"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 	"github.com/udistrital/resoluciones_crud/models"
-	"strings"
 )
 
 type ResolucionVinculacionController struct {
@@ -33,7 +35,7 @@ func (c *ResolucionVinculacionController) URLMapping() {
 // @Failure 403
 // @router / [get]
 func (c *ResolucionVinculacionController) GetAll() {
-	defer c.errorControl()
+	defer ErrorControl(c.Controller, "ResolucionVinculacionController")
 
 	//var fields []string
 	//var sortby []string
@@ -100,7 +102,7 @@ func (c *ResolucionVinculacionController) GetAll() {
 // @router /Aprobada [get]
 func (c *ResolucionVinculacionController) GetAllAprobada() {
 
-	defer c.errorControl()
+	defer ErrorControl(c.Controller, "ResolucionVinculacionController")
 
 	//var fields []string
 	//var sortby []string
@@ -160,18 +162,19 @@ func (c *ResolucionVinculacionController) GetAllAprobada() {
 // @Failure 403 body is empty
 // @router /expedidas_vigencia_periodo [get]
 func (c *ResolucionVinculacionController) GetAllExpedidasVigenciaPeriodo() {
+	defer ErrorControl(c.Controller, "ResolucionVinculacionController")
 
 	vigencia, err := c.GetInt("vigencia")
-	if err == nil {
-
-		listaResoluciones := models.GetAllExpedidasVigenciaPeriodo(vigencia)
-
-		c.Ctx.Output.SetStatus(201)
-		c.Data["json"] = listaResoluciones
-
+	if err != nil {
+		logs.Error(err)
+		outputError := map[string]interface{}{"funcion": "/GetAllExpedidasVigenciaPeriodo", "err": err, "status": "500"}
+		panic(outputError)
+	}
+	if listaResoluciones, err := models.GetAllExpedidasVigenciaPeriodo(vigencia); err != nil {
+		panic(err)
 	} else {
-		fmt.Println(err)
-		c.Abort("403")
+		c.Ctx.Output.SetStatus(200)
+		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": listaResoluciones}
 	}
 	c.ServeJSON()
 }
@@ -184,27 +187,45 @@ func (c *ResolucionVinculacionController) GetAllExpedidasVigenciaPeriodo() {
 // @Failure 403 body is empty
 // @router /expedidas_vigencia_periodo_vinculacion [get]
 func (c *ResolucionVinculacionController) GetAllExpedidasVigenciaPeriodoVinculacion() {
-
+	//defer c.errorControl()
+	defer ErrorControl(c.Controller, "ResolucionVinculacionController")
 	vigencia, err := c.GetInt("vigencia")
-	if err == nil {
-
-		listaResoluciones := models.GetAllExpedidasVigenciaPeriodoVinculacion(vigencia)
-
-		c.Ctx.Output.SetStatus(201)
-		c.Data["json"] = listaResoluciones
-
-	} else {
-		fmt.Println(err)
-		c.Abort("403")
+	if err != nil {
+		logs.Error(err)
+		outputError := map[string]interface{}{"funcion": "/GetAllExpedidasVigenciaPeriodo", "err": err, "status": "500"}
+		panic(outputError)
 	}
+
+	if listaResoluciones, err := models.GetAllExpedidasVigenciaPeriodoVinculacion(vigencia); err != nil {
+		panic(err)
+	} else {
+		c.Ctx.Output.SetStatus(200)
+		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": listaResoluciones}
+	}
+
 	c.ServeJSON()
 }
 
-func (c *ResolucionVinculacionController) errorControl() {
+/*func (c *ResolucionVinculacionController) errorControl() {
 	if err := recover(); err != nil {
 		logs.Error(err)
 		localError := err.(map[string]interface{})
 		c.Data["mesaage"] = (beego.AppConfig.String("appname") + "/" + "ResolucionVinculacionController" + "/" + (localError["funcion"]).(string))
+		c.Data["data"] = (localError["err"])
+		if status, ok := localError["status"]; ok {
+			c.Abort(status.(string))
+		} else {
+			c.Abort("404")
+		}
+	}
+}*/
+
+func ErrorControl(c beego.Controller, controller string) {
+	if err := recover(); err != nil {
+		logs.Error(err)
+		localError := err.(map[string]interface{})
+		c.Data["mesaage"] = (beego.AppConfig.String("appname") + "/" + controller + "/" + (localError["funcion"]).(string))
+		fmt.Println(c.Data["mesaage"])
 		c.Data["data"] = (localError["err"])
 		if status, ok := localError["status"]; ok {
 			c.Abort(status.(string))

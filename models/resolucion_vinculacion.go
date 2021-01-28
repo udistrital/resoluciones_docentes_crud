@@ -272,13 +272,22 @@ func GetAllResolucionAprobada(query map[string]string, offset int64, limit int64
 	return temp, nil
 }
 
-func GetAllExpedidasVigenciaPeriodo(vigencia int) (arregloIDs []ResolucionVinculacion) {
+func GetAllExpedidasVigenciaPeriodo(vigencia int) (arregloIDs []ResolucionVinculacion, outputError map[string]interface{}) {
+	defer func() {
+		if err := recover(); err != nil {
+			outputError = map[string]interface{}{"funcion": "/GetAllResolucionAprobada", "err": err, "status": "500"}
+			return
+		}
+	}()
+
 	o := orm.NewOrm()
 	var temp []ResolucionVinculacion
-	_, err := o.Raw("SELECT DISTINCT r.id_resolucion id, e.nombre_estado estado, r.numero_resolucion numero, r.vigencia vigencia, r.periodo periodo, rv.id_facultad facultad, rv.nivel_academico nivel_academico, rv.dedicacion dedicacion, r.numero_semanas numero_semanas,r.fecha_expedicion fecha_expedicion FROM administrativa.resolucion r, administrativa.resolucion_vinculacion_docente rv, administrativa.resolucion_estado re, administrativa.estado_resolucion e WHERE r.id_resolucion=rv.id_resolucion AND re.resolucion=r.id_resolucion AND re.estado=e.id AND re.fecha_registro=(SELECT MAX(re_aux.fecha_registro) FROM administrativa.resolucion_estado re_aux WHERE re_aux.resolucion=r.id_resolucion) AND r.vigencia = ? AND e.nombre_estado IN('Expedida') ORDER BY id desc;", vigencia).QueryRows(&temp)
+	_, err := o.Raw("SELECT DISTINCT r.id id, e.nombre_estado estado, r.numero_resolucion numero, r.vigencia vigencia, r.periodo periodo, rv.facultad_id facultad, rv.nivel_academico nivel_academico, rv.dedicacion dedicacion, r.numero_semanas numero_semanas,r.fecha_expedicion fecha_expedicion FROM resoluciones.resolucion r, resoluciones.resolucion_vinculacion_docente rv, resoluciones.resolucion_estado re, resoluciones.estado_resolucion e WHERE r.id=rv.id AND re.resolucion_id=r.id AND re.estado_resolucion_id=e.id AND re.fecha_registro=(SELECT MAX(re_aux.fecha_registro) FROM resoluciones.resolucion_estado re_aux WHERE re_aux.resolucion_id=r.id) AND r.vigencia = ? AND e.nombre_estado IN('Expedida') ORDER BY id desc;", vigencia).QueryRows(&temp)
 
-	if err == nil {
-		fmt.Println("Consulta exitosa")
+	if err != nil {
+		logs.Error(err)
+		outputError = map[string]interface{}{"funcion": "/GetAllResolucionAprobada1", "err": err.Error(), "status": "500"}
+		return arregloIDs, outputError
 	}
 
 	for x, resoluciones := range temp {
@@ -286,16 +295,26 @@ func GetAllExpedidasVigenciaPeriodo(vigencia int) (arregloIDs []ResolucionVincul
 		temp[x].FechaExpedicion = resoluciones.FechaExpedicion
 	}
 
-	return temp
+	return temp, nil
 }
 
-func GetAllExpedidasVigenciaPeriodoVinculacion(vigencia int) (arregloIDs []ResolucionVinculacion) {
+func GetAllExpedidasVigenciaPeriodoVinculacion(vigencia int) (arregloIDs []ResolucionVinculacion, outputError map[string]interface{}) {
+
+	defer func() {
+		if err := recover(); err != nil {
+			outputError = map[string]interface{}{"funcion": "/GetAllExpedidasVigenciaPeriodoVinculacion", "err": err, "status": "500"}
+			return
+		}
+	}()
+
 	o := orm.NewOrm()
 	var temp []ResolucionVinculacion
-	_, err := o.Raw("SELECT DISTINCT r.id_resolucion id, e.nombre_estado estado, r.numero_resolucion numero, r.vigencia vigencia, r.periodo periodo, rv.id_facultad facultad, rv.nivel_academico nivel_academico, rv.dedicacion dedicacion, r.numero_semanas numero_semanas,r.fecha_expedicion fecha_expedicion FROM administrativa.resolucion r, administrativa.resolucion_vinculacion_docente rv, administrativa.resolucion_estado re, administrativa.estado_resolucion e WHERE r.id_resolucion=rv.id_resolucion AND re.resolucion=r.id_resolucion AND re.estado=e.id AND re.fecha_registro=(SELECT MAX(re_aux.fecha_registro) FROM administrativa.resolucion_estado re_aux WHERE re_aux.resolucion=r.id_resolucion) AND r.vigencia = ? AND e.nombre_estado IN('Expedida') AND id_tipo_resolucion IN (1,3,4) ORDER BY id desc;", vigencia).QueryRows(&temp)
+	_, err := o.Raw("SELECT DISTINCT r.id id, e.nombre_estado estado, r.numero_resolucion numero, r.vigencia vigencia, r.periodo periodo, rv.facultad_id facultad, rv.nivel_academico nivel_academico, rv.dedicacion dedicacion, r.numero_semanas numero_semanas,r.fecha_expedicion fecha_expedicion FROM resoluciones.resolucion r, resoluciones.resolucion_vinculacion_docente rv, resoluciones.resolucion_estado re, resoluciones.estado_resolucion e WHERE r.id=rv.id AND re.resolucion_id=r.id AND re.estado_resolucion_id=e.id AND re.fecha_registro=(SELECT MAX(re_aux.fecha_registro) FROM resoluciones.resolucion_estado re_aux WHERE re_aux.resolucion_id=r.id) AND r.vigencia = ? AND e.nombre_estado IN('Expedida') AND r.tipo_resolucion_id IN (1,3,4) ORDER BY id desc;", vigencia).QueryRows(&temp)
 
-	if err == nil {
-		fmt.Println("Consulta exitosa")
+	if err != nil {
+		logs.Error(err)
+		outputError = map[string]interface{}{"funcion": "/GetAllExpedidasVigenciaPeriodoVinculacion", "err": err.Error(), "status": "500"}
+		return arregloIDs, outputError
 	}
 
 	for x, resoluciones := range temp {
@@ -303,5 +322,5 @@ func GetAllExpedidasVigenciaPeriodoVinculacion(vigencia int) (arregloIDs []Resol
 		temp[x].FechaExpedicion = resoluciones.FechaExpedicion
 	}
 
-	return temp
+	return temp, nil
 }

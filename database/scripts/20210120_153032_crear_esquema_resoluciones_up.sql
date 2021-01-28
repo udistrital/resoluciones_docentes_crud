@@ -3,7 +3,7 @@ CREATE SCHEMA IF NOT EXISTS resoluciones;
 
 SET search_path TO pg_catalog,public,resoluciones;
 
-CREATE TABLE resoluciones.resolucion (
+CREATE TABLE IF NOT EXISTS resoluciones.resolucion (
 	id serial NOT NULL,
 	numero_resolucion character varying NOT NULL DEFAULT 10,
 	fecha_expedicion timestamp,
@@ -28,7 +28,7 @@ CREATE TABLE resoluciones.resolucion (
 
 
 
-CREATE TABLE resoluciones.dedicacion (
+CREATE TABLE IF NOT EXISTS resoluciones.dedicacion (
 	id serial NOT NULL,
 	nombre_dedicacion character varying(100) NOT NULL,
 	descripcion character varying(5000),
@@ -42,7 +42,7 @@ CREATE TABLE resoluciones.dedicacion (
 
 
 
-CREATE TABLE resoluciones.vinculacion_docente (
+CREATE TABLE IF NOT EXISTS resoluciones.vinculacion_docente (
 	id serial NOT NULL,
 	numero_contrato character varying(10),
 	vigencia integer,
@@ -72,7 +72,7 @@ CREATE TABLE resoluciones.vinculacion_docente (
 
 
 
-CREATE TABLE resoluciones.resolucion_vinculacion_docente (
+CREATE TABLE IF NOT EXISTS resoluciones.resolucion_vinculacion_docente (
 	id serial NOT NULL,
 	facultad_id integer NOT NULL,
 	dedicacion character varying(12) NOT NULL,
@@ -87,7 +87,7 @@ CREATE TABLE resoluciones.resolucion_vinculacion_docente (
 
 
 
-CREATE TABLE resoluciones.componente_resolucion (
+CREATE TABLE IF NOT EXISTS resoluciones.componente_resolucion (
 	id serial NOT NULL,
 	numero integer NOT NULL,
 	resolucion_id smallint NOT NULL,
@@ -104,7 +104,7 @@ CREATE TABLE resoluciones.componente_resolucion (
 
 
 
-CREATE TABLE resoluciones.estado_resolucion (
+CREATE TABLE IF NOT EXISTS resoluciones.estado_resolucion (
 	id serial NOT NULL,
 	fecha_registro timestamp NOT NULL,
 	nombre_estado character varying NOT NULL DEFAULT 20,
@@ -117,7 +117,7 @@ CREATE TABLE resoluciones.estado_resolucion (
 
 
 
-CREATE TABLE resoluciones.resolucion_estado (
+CREATE TABLE IF NOT EXISTS resoluciones.resolucion_estado (
 	id serial NOT NULL,
 	fecha_registro timestamp NOT NULL,
 	usuario character varying(50),
@@ -134,7 +134,7 @@ CREATE TABLE resoluciones.resolucion_estado (
 
 
 
-CREATE TABLE resoluciones.modificacion_resolucion (
+CREATE TABLE IF NOT EXISTS resoluciones.modificacion_resolucion (
 	id serial NOT NULL,
 	resolucion_nueva_id integer NOT NULL,
 	resolucion_anterior_id integer NOT NULL,
@@ -147,7 +147,7 @@ CREATE TABLE resoluciones.modificacion_resolucion (
 
 
 
-CREATE TABLE resoluciones.modificacion_vinculacion (
+CREATE TABLE IF NOT EXISTS resoluciones.modificacion_vinculacion (
 	id serial NOT NULL,
 	modificacion_resolucion_id integer NOT NULL,
 	vinculacion_docente_cancelada_id integer NOT NULL,
@@ -162,7 +162,7 @@ CREATE TABLE resoluciones.modificacion_vinculacion (
 
 
 
-CREATE TABLE resoluciones.tipo_resolucion (
+CREATE TABLE IF NOT EXISTS resoluciones.tipo_resolucion (
 	id serial NOT NULL,
 	nombre_tipo_resolucion character varying(150) NOT NULL,
 	descripcion character varying(5000),

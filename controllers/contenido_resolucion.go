@@ -3,10 +3,11 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 	"github.com/udistrital/resoluciones_crud/models"
-	"strconv"
 )
 
 type ResolucionCompletaController struct {
@@ -29,7 +30,8 @@ func (c *ResolucionCompletaController) URLMapping() {
 // @router /resolucion-template/:dedicacion/:nivel [get]
 func (c *ResolucionCompletaController) ResolucionTemplate() {
 
-	defer c.errorControl()
+	//defer c.errorControl()
+	defer ErrorControl(c.Controller, "ResolucionVinculacionController")
 
 	dedicacion := c.Ctx.Input.Param(":dedicacion")
 	nivel := c.Ctx.Input.Param(":nivel")
@@ -53,7 +55,8 @@ func (c *ResolucionCompletaController) ResolucionTemplate() {
 // @router /:idResolucion [get]
 func (c *ResolucionCompletaController) GetOne() {
 
-	defer c.errorControl()
+	//defer c.errorControl()
+	defer ErrorControl(c.Controller, "ResolucionVinculacionController")
 
 	idResolucion := c.Ctx.Input.Param(":idResolucion")
 	resolucion, err := models.GetOneResolucionCompleta(idResolucion)
@@ -74,7 +77,7 @@ func (c *ResolucionCompletaController) GetOne() {
 // @Failure 403 :idResolucion is not int
 // @router /:idResolucion [put]
 func (c *ResolucionCompletaController) Put() {
-	defer c.errorControl()
+	defer ErrorControl(c.Controller, "ResolucionVinculacionController")
 
 	idResolucionStr := c.Ctx.Input.Param(":idResolucion")
 	idResolucion, _ := strconv.Atoi(idResolucionStr)
@@ -94,7 +97,7 @@ func (c *ResolucionCompletaController) Put() {
 	c.ServeJSON()
 }
 
-func (c *ResolucionCompletaController) errorControl() {
+/*func (c *ResolucionCompletaController) errorControl() {
 	if err := recover(); err != nil {
 		logs.Error(err)
 		localError := err.(map[string]interface{})
@@ -106,4 +109,4 @@ func (c *ResolucionCompletaController) errorControl() {
 			c.Abort("404")
 		}
 	}
-}
+}*/

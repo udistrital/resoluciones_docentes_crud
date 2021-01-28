@@ -2,9 +2,10 @@ package models
 
 import (
 	"fmt"
+	"strconv"
+
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
-	"strconv"
 )
 
 type Paragrafo struct {
@@ -34,7 +35,7 @@ type ResolucionCompleta struct {
 func GetOneResolucionCompleta(idResolucion string) (resolucion ResolucionCompleta, outputError map[string]interface{}) {
 	defer func() {
 		if err := recover(); err != nil {
-			outputError = map[string]interface{}{"funcion": "/GetOneResolucionCompleta", "err": err, "status": "500"}
+			outputError = map[string]interface{}{"funcion": "GetOneResolucionCompleta", "err": err, "status": "500"}
 			//panic(outputError)
 			return
 		}
