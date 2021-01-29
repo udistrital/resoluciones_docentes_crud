@@ -6,8 +6,8 @@ import (
 	"github.com/astaxie/beego/plugins/cors"
 	_ "github.com/lib/pq"
 	_ "github.com/udistrital/resoluciones_crud/routers"
-	"github.com/udistrital/utils_oas/customerrorv2"
 	apistatus "github.com/udistrital/utils_oas/apiStatusLib"
+	"github.com/udistrital/utils_oas/customerrorv2"
 )
 
 func main() {

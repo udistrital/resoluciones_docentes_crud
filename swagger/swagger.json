@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "title": "beego Test API",
-        "description": "beego has a very cool tools to autogenerate documents for your API",
+        "title": "Resoluciones CRUD API",
+        "description": "Crud del aplicativo resoluciones, se usa para generar las resoluciones que afectan a los docentes de vinculacion especial, las cuales se usan para vincular, adicionar, reducir un contrato.",
         "version": "1.0.0",
         "termsOfService": "http://beego.me/",
         "contact": {
@@ -193,7 +193,7 @@
                 "tags": [
                     "contenido_resolucion"
                 ],
-                "description": "get ResolucionCompleta by id",
+                "description": "Arma una resolucion a partir de la dedicacion y el nivel.(ResolucionTemplate)",
                 "operationId": "ResolucionCompletaController.Get Template",
                 "parameters": [
                     {
@@ -218,8 +218,14 @@
                             "$ref": "#/definitions/models.ResolucionCompleta"
                         }
                     },
-                    "403": {
-                        "description": ""
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "502": {
+                        "description": "Bad Gateway"
                     }
                 }
             }
@@ -249,6 +255,15 @@
                     },
                     "403": {
                         "description": ":idResolucion is empty"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "502": {
+                        "description": "Bad Gateway"
                     }
                 }
             },
@@ -276,6 +291,15 @@
                     },
                     "403": {
                         "description": ":idResolucion is not int"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "502": {
+                        "description": "Bad Gateway"
                     }
                 }
             }

@@ -22,15 +22,15 @@ func (c *ResolucionCompletaController) URLMapping() {
 
 // GetOne ...
 // @Title Get Template
-// @Description get ResolucionCompleta by id
+// @Description Arma una resolucion a partir de la dedicacion y el nivel.(ResolucionTemplate)
 // @Param	dedicacion	path 	string	true		"Nombre de la dedicacion (HCP, HCH ...)"
 // @Param	nivel	path 	string	true		"Nivel de la dedicacion (PEGRADO, POSGRADO ....)"
 // @Success 200 {object} models.ResolucionCompleta
-// @Failure 403
+// @Failure 404 Not found
+// @Failure 500 Internal Server Error
+// @Failure 502 Bad Gateway
 // @router /resolucion-template/:dedicacion/:nivel [get]
 func (c *ResolucionCompletaController) ResolucionTemplate() {
-
-	//defer c.errorControl()
 	defer ErrorControl(c.Controller, "ResolucionVinculacionController")
 
 	dedicacion := c.Ctx.Input.Param(":dedicacion")
@@ -52,10 +52,11 @@ func (c *ResolucionCompletaController) ResolucionTemplate() {
 // @Param	idResolucion		path 	string	true		"The key for staticblock"
 // @Success 200 {object} models.ResolucionCompleta
 // @Failure 403 :idResolucion is empty
+// @Failure 404 Not found
+// @Failure 500 Internal Server Error
+// @Failure 502 Bad Gateway
 // @router /:idResolucion [get]
 func (c *ResolucionCompletaController) GetOne() {
-
-	//defer c.errorControl()
 	defer ErrorControl(c.Controller, "ResolucionVinculacionController")
 
 	idResolucion := c.Ctx.Input.Param(":idResolucion")
@@ -75,12 +76,16 @@ func (c *ResolucionCompletaController) GetOne() {
 // @Param	idResolucion		path 	string	true		"The id you want to update"
 // @Success 200 {object} models.ResolucionCompleta
 // @Failure 403 :idResolucion is not int
+// @Failure 404 Not found
+// @Failure 500 Internal Server Error
+// @Failure 502 Bad Gateway
 // @router /:idResolucion [put]
 func (c *ResolucionCompletaController) Put() {
 	defer ErrorControl(c.Controller, "ResolucionVinculacionController")
 
 	idResolucionStr := c.Ctx.Input.Param(":idResolucion")
 	idResolucion, _ := strconv.Atoi(idResolucionStr)
+
 	v := models.ResolucionCompleta{Id: idResolucion}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if err := models.UpdateResolucionCompletaById(&v); err == nil {

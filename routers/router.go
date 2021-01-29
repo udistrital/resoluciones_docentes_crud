@@ -1,10 +1,11 @@
 // @APIVersion 1.0.0
-// @Title beego Test API
-// @Description beego has a very cool tools to autogenerate documents for your API
+// @Title Resoluciones CRUD API
+// @Description Crud del aplicativo resoluciones, se usa para generar las resoluciones que afectan a los docentes de vinculacion especial, las cuales se usan para vincular, adicionar, reducir un contrato.
 // @Contact astaxie@gmail.com
 // @TermsOfServiceUrl http://beego.me/
 // @License Apache 2.0
 // @LicenseUrl http://www.apache.org/licenses/LICENSE-2.0.html
+// @Author Oficina Asesora de Sistemas, Universidad Distrital
 package routers
 
 import (
