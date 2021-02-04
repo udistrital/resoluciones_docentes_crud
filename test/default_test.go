@@ -1,18 +1,10 @@
 package test
 
-/*
 import (
-	"fmt"
-	"net/http"
-	"net/http/httptest"
-	"path/filepath"
-	"runtime"
-	"testing"
-
-	"github.com/astaxie/beego"
-	. "github.com/smartystreets/goconvey/convey"
+	_ "github.com/lib/pq"
 )
 
+/*
 func init() {
 	_, file, _, _ := runtime.Caller(0)
 	apppath, _ := filepath.Abs(filepath.Dir(filepath.Join(file, ".."+string(filepath.Separator))))
@@ -38,3 +30,14 @@ func TestGet(t *testing.T) {
 	})
 }
 */
+
+/*func TestMain(t *testing.T) {
+	pgUser := os.Getenv("POSTGRES_USER")
+	pgPass := os.Getenv("POSTGRES_PASSWORD")
+	pgUrls := os.Getenv("POSTGRES_HOST")
+	pgDb := os.Getenv("POSTGRES_DB")
+	pgPort := os.Getenv("POSTGRES_DB_PORT")
+	pgSchema := os.Getenv("POSTGRES_SCHEMA")
+	orm.RegisterDataBase("default", "postgres", "postgres://"+pgUser+":"+pgPass+"@"+pgUrls+":"+pgPort+"/"+pgDb+"?sslmode=disable&search_path="+pgSchema+"")
+
+}*/

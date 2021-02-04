@@ -171,6 +171,7 @@ func (c *ResolucionVinculacionController) GetAllExpedidasVigenciaPeriodo() {
 		panic(outputError)
 	}
 	if listaResoluciones, err := models.GetAllExpedidasVigenciaPeriodo(vigencia); err != nil {
+		fmt.Println("Se murio: ", err)
 		panic(err)
 	} else {
 		c.Ctx.Output.SetStatus(200)

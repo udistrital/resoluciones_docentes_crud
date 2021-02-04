@@ -1,19 +1,19 @@
 package controllers
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"path/filepath"
-	"runtime"
+	"os"
 	"testing"
+	"time"
 
+	"github.com/go-testfixtures/testfixtures/v3"
 	_ "github.com/udistrital/resoluciones_crud/routers"
 
-	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
@@ -21,18 +21,36 @@ import (
 )
 
 var o orm.Ormer
+var (
+	db       *sql.DB
+	fixtures *testfixtures.Loader
+)
+
+type ResolucionVinculacion struct {
+	Id                 int       `orm:"column(id );pk;auto"`
+	Estado             string    `orm:"column(estado )"`
+	Numero             string    `orm:"column(numero )"`
+	Vigencia           int       `orm:"column(vigencia )"`
+	Facultad           int       `orm:"column(facultad )"`
+	NivelAcademico     string    `orm:"column(nivel_academico )"`
+	Dedicacion         string    `orm:"column(dedicacion )"`
+	FechaExpedicion    time.Time `orm:"column(fecha_expedicion );type(timestamp without time zone)"`
+	NumeroSemanas      int       `orm:"column(numero_semanas )"`
+	Periodo            int       `orm:"column(periodo )"`
+	TipoResolucion     string    `orm:"column(tipo_resolucion )"`
+	IdDependenciaFirma int       `orm:"column(dependencia_firma )"`
+	PeriodoCarga       int       `orm:"column(periodo_carga )"`
+	VigenciaCarga      int       `orm:"column(vigencia_carga )"`
+}
 
 func init() {
-	_, file, _, _ := runtime.Caller(0)
-	apppath, _ := filepath.Abs(filepath.Dir(filepath.Join(file, ".."+string(filepath.Separator))))
-	beego.TestBeegoInit(apppath)
-	//regitro de bd postgres
-	err := orm.RegisterDriver("postgres", orm.DRPostgres)
-	if err != nil {
-		logs.Error(err)
-		panic(err)
-	}
-	orm.Debug = true
+	pgUser := os.Getenv("POSTGRES_USER")
+	pgPass := os.Getenv("POSTGRES_PASSWORD")
+	pgUrls := os.Getenv("POSTGRES_HOST")
+	pgDb := os.Getenv("POSTGRES_DB")
+	pgPort := os.Getenv("POSTGRES_DB_PORT")
+	pgSchema := os.Getenv("POSTGRES_SCHEMA")
+	orm.RegisterDataBase("default", "postgres", "postgres://"+pgUser+":"+pgPass+"@"+pgUrls+":"+pgPort+"/"+pgDb+"?sslmode=disable&search_path="+pgSchema+"")
 
 }
 
@@ -66,60 +84,28 @@ func init() {
 
 }*/
 
-func testWithDb(t *testing.T, f func(t *testing.T, mock sqlmock.Sqlmock)) {
-	db, mock, err := sqlmock.New()
+func TestGetAll(t *testing.T) {
+	r, err := http.NewRequest("GET", "/v1/resolucion-vinculacion/expedidas_vigencia_periodo?vigencia=2019", nil)
 	if err != nil {
-		t.Errorf("failed to open stub database connection, error: %v", err)
+		t.Fatal("error", err)
 	}
+	w := httptest.NewRecorder()
 
-	orm.AddAliasWthDB("default", "postgres", db)
-	defer db.Close()
+	fmt.Println(w)
+	beego.BeeApp.Handlers.ServeHTTP(w, r)
+	fmt.Println(r)
+	fmt.Println(w)
 
-	f(t, mock)
-}
-
-func TestDBWithMockedSqlDriver(t *testing.T) {
-	testWithDb(t, func(t *testing.T, mock sqlmock.Sqlmock) {
-		// setup mock
-		columns := []string{"id"}
-		mock.ExpectQuery("SELECT (.+) FROM `XXX`").
-			WillReturnRows(
-				sqlmock.NewRows(columns).
-					FromCSVString("1").
-					FromCSVString("2"))
-			//***************************************
-		// call function to test
-		r, err := http.NewRequest("GET", "/v1/resolucion-vinculacion/", nil)
-		if err != nil {
-			t.Fatal("error", err)
-		}
-		w := httptest.NewRecorder()
-		//x := conn.ResolucionVinculacionController{}
-		//x.GetAll()
-		//handler := http.HandlerFunc(x.GetAll(x, y))
-		fmt.Println(w)
-		beego.BeeApp.Handlers.ServeHTTP(w, r)
-		fmt.Println(r)
-		fmt.Println(w)
-
-		var response = map[string]interface{}{}
-		json.Unmarshal(w.Body.Bytes(), &response)
-		t.Log(w.Body.String())
-		t.Log(response)
-		Convey("Subject: Test Contenido Resolucion Endpoint\n", t, func() {
-			Convey("Status Code Should Be 200", func() {
-				So(w.Code, ShouldEqual, 200)
-			})
-			Convey("The Result Should Not Be Empty", func() {
-				So(w.Body.Len(), ShouldBeGreaterThan, 0)
-			})
+	var response = map[string]interface{}{}
+	json.Unmarshal(w.Body.Bytes(), &response)
+	t.Log(w.Body.String())
+	t.Log(response)
+	Convey("Subject: Test Contenido Resolucion Endpoint\n", t, func() {
+		Convey("Status Code Should Be 200", func() {
+			So(w.Code, ShouldEqual, 200)
 		})
-		//****************************************
-		//db.WhateverToTest()
-
-		// we make sure that all expectations were met
-		if err := mock.ExpectationsWereMet(); err != nil {
-			t.Errorf("there were unfulfilled expectations: %s", err)
-		}
+		Convey("The Result Should Not Be Empty", func() {
+			So(w.Body.Len(), ShouldBeGreaterThan, 0)
+		})
 	})
 }

@@ -12,7 +12,6 @@ CREATE TABLE IF NOT EXISTS resoluciones.resolucion (
 	tipo_resolucion_id integer NOT NULL,
 	preambulo_resolucion character varying(3000) NOT NULL,
 	consideracion_resolucion character varying(3000) NOT NULL,
-	fecha_registro timestamp NOT NULL,
 	numero_semanas integer NOT NULL DEFAULT 0,
 	periodo integer NOT NULL DEFAULT 0,
 	titulo character varying(2000),
@@ -20,7 +19,7 @@ CREATE TABLE IF NOT EXISTS resoluciones.resolucion (
 	vigencia_carga integer,
 	periodo_carga integer,
 	activo bool DEFAULT True,
-	fecha_creacion timestamp,
+	fecha_creacion timestamp NOT NULL,
 	fecha_modificacion timestamp,
 	CONSTRAINT pk_resolucion PRIMARY KEY (id)
 
@@ -54,7 +53,6 @@ CREATE TABLE IF NOT EXISTS resoluciones.vinculacion_docente (
 	resolucion_vinculacion_docente_id integer NOT NULL,
 	dedicacion_id integer NOT NULL,
 	proyecto_curricular_id smallint NOT NULL,
-	fecha_registro timestamp NOT NULL,
 	valor_contrato numeric(16,3),
 	categoria character varying(15),
 	disponibilidad integer,
@@ -63,7 +61,7 @@ CREATE TABLE IF NOT EXISTS resoluciones.vinculacion_docente (
 	vigencia_rp numeric(4,0),
 	fecha_inicio timestamp,
 	activo bool DEFAULT True,
-	fecha_creacion timestamp,
+	fecha_creacion timestamp NOT NULL,
 	fecha_modificacion timestamp,
 	CONSTRAINT pk_contrato_docente PRIMARY KEY (id),
 	CONSTRAINT uq_numero_contrato_vinculacion_docente UNIQUE (numero_contrato,vigencia)
@@ -106,10 +104,9 @@ CREATE TABLE IF NOT EXISTS resoluciones.componente_resolucion (
 
 CREATE TABLE IF NOT EXISTS resoluciones.estado_resolucion (
 	id serial NOT NULL,
-	fecha_registro timestamp NOT NULL,
 	nombre_estado character varying NOT NULL DEFAULT 20,
 	activo bool DEFAULT True,
-	fecha_creacion timestamp,
+	fecha_creacion timestamp NOT NULL,
 	fecha_modificacion timestamp,
 	CONSTRAINT pk_estado_resolucion PRIMARY KEY (id)
 
@@ -119,12 +116,11 @@ CREATE TABLE IF NOT EXISTS resoluciones.estado_resolucion (
 
 CREATE TABLE IF NOT EXISTS resoluciones.resolucion_estado (
 	id serial NOT NULL,
-	fecha_registro timestamp NOT NULL,
 	usuario character varying(50),
 	estado_resolucion_id integer NOT NULL,
 	resolucion_id integer NOT NULL,
 	activo bool DEFAULT True,
-	fecha_creacion timestamp,
+	fecha_creacion timestamp NOT NULL,
 	fecha_modificacion timestamp,
 	CONSTRAINT pk_resolucion_estado PRIMARY KEY (id)
 

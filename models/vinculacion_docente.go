@@ -22,7 +22,6 @@ type VinculacionDocente struct {
 	ResolucionVinculacionDocenteId *ResolucionVinculacionDocente `orm:"column(resolucion_vinculacion_docente_id);rel(fk)"`
 	DedicacionId                   *Dedicacion                   `orm:"column(dedicacion_id);rel(fk)"`
 	ProyectoCurricularId           int16                         `orm:"column(proyecto_curricular_id)"`
-	FechaRegistro                  time.Time                     `orm:"column(fecha_registro);type(timestamp without time zone)"`
 	ValorContrato                  float64                       `orm:"column(valor_contrato);null"`
 	Categoria                      string                        `orm:"column(categoria);null"`
 	Disponibilidad                 int                           `orm:"column(disponibilidad);null"`
@@ -31,7 +30,7 @@ type VinculacionDocente struct {
 	VigenciaRp                     float64                       `orm:"column(vigencia_rp);null"`
 	FechaInicio                    time.Time                     `orm:"column(fecha_inicio);type(timestamp without time zone);null"`
 	Activo                         bool                          `orm:"column(activo);null"`
-	FechaCreacion                  time.Time                     `orm:"column(fecha_creacion);type(timestamp without time zone);null"`
+	FechaCreacion                  time.Time                     `orm:"column(fecha_creacion);type(timestamp without time zone)"`
 	FechaModificacion              time.Time                     `orm:"column(fecha_modificacion);type(timestamp without time zone);null"`
 }
 

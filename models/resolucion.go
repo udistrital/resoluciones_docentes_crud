@@ -19,7 +19,6 @@ type Resolucion struct {
 	TipoResolucionId        *TipoResolucion `orm:"column(tipo_resolucion_id);rel(fk)"`
 	PreambuloResolucion     string          `orm:"column(preambulo_resolucion)"`
 	ConsideracionResolucion string          `orm:"column(consideracion_resolucion)"`
-	FechaRegistro           time.Time       `orm:"column(fecha_registro);type(timestamp without time zone)"`
 	NumeroSemanas           int             `orm:"column(numero_semanas)"`
 	Periodo                 int             `orm:"column(periodo)"`
 	Titulo                  string          `orm:"column(titulo);null"`
@@ -27,7 +26,7 @@ type Resolucion struct {
 	VigenciaCarga           int             `orm:"column(vigencia_carga);null"`
 	PeriodoCarga            int             `orm:"column(periodo_carga);null"`
 	Activo                  bool            `orm:"column(activo);null"`
-	FechaCreacion           time.Time       `orm:"column(fecha_creacion);type(timestamp without time zone);null"`
+	FechaCreacion           time.Time       `orm:"column(fecha_creacion);type(timestamp without time zone)"`
 	FechaModificacion       time.Time       `orm:"column(fecha_modificacion);type(timestamp without time zone);null"`
 }
 

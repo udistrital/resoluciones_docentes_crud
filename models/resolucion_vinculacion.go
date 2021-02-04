@@ -3,12 +3,13 @@ package models
 import (
 	"errors"
 	"fmt"
-	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
-	"github.com/astaxie/beego/orm"
 	"reflect"
 	"strings"
 	"time"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
+	"github.com/astaxie/beego/orm"
 )
 
 type ResolucionVinculacion struct {
@@ -282,7 +283,8 @@ func GetAllExpedidasVigenciaPeriodo(vigencia int) (arregloIDs []ResolucionVincul
 
 	o := orm.NewOrm()
 	var temp []ResolucionVinculacion
-	_, err := o.Raw("SELECT DISTINCT r.id id, e.nombre_estado estado, r.numero_resolucion numero, r.vigencia vigencia, r.periodo periodo, rv.facultad_id facultad, rv.nivel_academico nivel_academico, rv.dedicacion dedicacion, r.numero_semanas numero_semanas,r.fecha_expedicion fecha_expedicion FROM resoluciones.resolucion r, resoluciones.resolucion_vinculacion_docente rv, resoluciones.resolucion_estado re, resoluciones.estado_resolucion e WHERE r.id=rv.id AND re.resolucion_id=r.id AND re.estado_resolucion_id=e.id AND re.fecha_registro=(SELECT MAX(re_aux.fecha_registro) FROM resoluciones.resolucion_estado re_aux WHERE re_aux.resolucion_id=r.id) AND r.vigencia = ? AND e.nombre_estado IN('Expedida') ORDER BY id desc;", vigencia).QueryRows(&temp)
+	//_, err := o.Raw("SELECT DISTINCT r.id id, e.nombre_estado estado, r.numero_resolucion numero, r.vigencia vigencia, r.periodo periodo, rv.facultad_id facultad, rv.nivel_academico nivel_academico, rv.dedicacion dedicacion, r.numero_semanas numero_semanas,r.fecha_expedicion fecha_expedicion FROM resoluciones.resolucion r, resoluciones.resolucion_vinculacion_docente rv, resoluciones.resolucion_estado re, resoluciones.estado_resolucion e WHERE r.id=rv.id AND re.resolucion_id=r.id AND re.estado_resolucion_id=e.id AND re.fecha_registro=(SELECT MAX(re_aux.fecha_registro) FROM resoluciones.resolucion_estado re_aux WHERE re_aux.resolucion_id=r.id) AND r.vigencia = ? AND e.nombre_estado IN('Expedida') ORDER BY id desc;", vigencia).QueryRows(&temp)
+	_, err := o.Raw("SELECT id FROM resoluciones.resolucion").QueryRows(&temp)
 
 	if err != nil {
 		logs.Error(err)
