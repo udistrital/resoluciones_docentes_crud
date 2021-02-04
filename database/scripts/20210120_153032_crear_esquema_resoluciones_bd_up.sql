@@ -1,4 +1,3 @@
-
 CREATE SCHEMA IF NOT EXISTS resoluciones;
 
 SET search_path TO pg_catalog,public,resoluciones;
