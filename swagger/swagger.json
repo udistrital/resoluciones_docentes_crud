@@ -2139,10 +2139,6 @@
                     "type": "string",
                     "format": "datetime"
                 },
-                "FechaRegistro": {
-                    "type": "string",
-                    "format": "datetime"
-                },
                 "Id": {
                     "type": "integer",
                     "format": "int64"
@@ -2264,10 +2260,6 @@
                     "type": "string",
                     "format": "datetime"
                 },
-                "FechaRegistro": {
-                    "type": "string",
-                    "format": "datetime"
-                },
                 "Id": {
                     "type": "integer",
                     "format": "int64"
@@ -2356,10 +2348,6 @@
                     "format": "datetime"
                 },
                 "FechaModificacion": {
-                    "type": "string",
-                    "format": "datetime"
-                },
-                "FechaRegistro": {
                     "type": "string",
                     "format": "datetime"
                 },
@@ -2463,10 +2451,6 @@
                     "format": "datetime"
                 },
                 "FechaModificacion": {
-                    "type": "string",
-                    "format": "datetime"
-                },
-                "FechaRegistro": {
                     "type": "string",
                     "format": "datetime"
                 },

@@ -1,4 +1,4 @@
-INSERT INTO resoluciones.estado_resolucion(fecha_registro, nombre_estado, activo) VALUES
+INSERT INTO resoluciones.estado_resolucion(fecha_creacion, nombre_estado, activo) VALUES
     ('2017-08-13 00:00:00', 'Solicitada', true),
     ('2017-08-13 00:00:00', 'Expedida', true),
     ('2017-08-13 00:00:00', 'Cancelada', true),

@@ -12,12 +12,11 @@ import (
 
 type ResolucionEstado struct {
 	Id                 int               `orm:"column(id);pk;auto"`
-	FechaRegistro      time.Time         `orm:"column(fecha_registro);type(timestamp without time zone)"`
 	Usuario            string            `orm:"column(usuario);null"`
 	EstadoResolucionId *EstadoResolucion `orm:"column(estado_resolucion_id);rel(fk)"`
 	ResolucionId       *Resolucion       `orm:"column(resolucion_id);rel(fk)"`
 	Activo             bool              `orm:"column(activo);null"`
-	FechaCreacion      time.Time         `orm:"column(fecha_creacion);type(timestamp without time zone);null"`
+	FechaCreacion      time.Time         `orm:"column(fecha_creacion);type(timestamp without time zone)"`
 	FechaModificacion  time.Time         `orm:"column(fecha_modificacion);type(timestamp without time zone);null"`
 }
 
