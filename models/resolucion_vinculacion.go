@@ -113,7 +113,7 @@ func GetAllResolucionVinculacion(query map[string]string, offset int64, limit in
 		And("r.tipo_resolucion_id=tipo.id").
 		And("re.estado_resolucion_id=e.id").
 		And("re.estado_resolucion_id!=6").
-		And("re.fecha_registro=(SELECT MAX(re_aux.fecha_registro) FROM resoluciones.resolucion_estado re_aux WHERE re_aux.resolucion_id=r.id)")
+		And("re.fecha_modificacion=(SELECT MAX(re_aux.fecha_modificacion) FROM resoluciones.resolucion_estado re_aux WHERE re_aux.resolucion_id=r.id)")
 
 	qb2, err := orm.NewQueryBuilder("mysql")
 	if err != nil {
@@ -223,7 +223,7 @@ func GetAllResolucionAprobada(query map[string]string, offset int64, limit int64
 		Where("r.id=rv.id").
 		And("re.resolucion_id=r.id").
 		And("re.estado_resolucion_id=e.id").
-		And("re.fecha_registro=(SELECT MAX(re_aux.fecha_registro) FROM resoluciones.resolucion_estado re_aux WHERE re_aux.resolucion_id=r.id) AND e.nombre_estado IN('Aprobada','Expedida')").
+		And("re.fecha_modificacion=(SELECT MAX(re_aux.fecha_modificacion) FROM resoluciones.resolucion_estado re_aux WHERE re_aux.resolucion_id=r.id) AND e.nombre_estado IN('Aprobada','Expedida')").
 		And("tr.id=r.tipo_resolucion_id")
 
 	qb2, err := orm.NewQueryBuilder("mysql")
@@ -311,7 +311,7 @@ func GetAllExpedidasVigenciaPeriodoVinculacion(vigencia int) (arregloIDs []Resol
 
 	o := orm.NewOrm()
 	var temp []ResolucionVinculacion
-	_, err := o.Raw("SELECT DISTINCT r.id id, e.nombre_estado estado, r.numero_resolucion numero, r.vigencia vigencia, r.periodo periodo, rv.facultad_id facultad, rv.nivel_academico nivel_academico, rv.dedicacion dedicacion, r.numero_semanas numero_semanas,r.fecha_expedicion fecha_expedicion FROM resoluciones.resolucion r, resoluciones.resolucion_vinculacion_docente rv, resoluciones.resolucion_estado re, resoluciones.estado_resolucion e WHERE r.id=rv.id AND re.resolucion_id=r.id AND re.estado_resolucion_id=e.id AND re.fecha_registro=(SELECT MAX(re_aux.fecha_registro) FROM resoluciones.resolucion_estado re_aux WHERE re_aux.resolucion_id=r.id) AND r.vigencia = ? AND e.nombre_estado IN('Expedida') AND r.tipo_resolucion_id IN (1,3,4) ORDER BY id desc;", vigencia).QueryRows(&temp)
+	_, err := o.Raw("SELECT DISTINCT r.id id, e.nombre_estado estado, r.numero_resolucion numero, r.vigencia vigencia, r.periodo periodo, rv.facultad_id facultad, rv.nivel_academico nivel_academico, rv.dedicacion dedicacion, r.numero_semanas numero_semanas,r.fecha_expedicion fecha_expedicion FROM resoluciones.resolucion r, resoluciones.resolucion_vinculacion_docente rv, resoluciones.resolucion_estado re, resoluciones.estado_resolucion e WHERE r.id=rv.id AND re.resolucion_id=r.id AND re.estado_resolucion_id=e.id AND re.fecha_modificacion=(SELECT MAX(re_aux.fecha_modificacion) FROM resoluciones.resolucion_estado re_aux WHERE re_aux.resolucion_id=r.id) AND r.vigencia = ? AND e.nombre_estado IN('Expedida') AND r.tipo_resolucion_id IN (1,3,4) ORDER BY id desc;", vigencia).QueryRows(&temp)
 
 	if err != nil {
 		logs.Error(err)
