@@ -18,7 +18,7 @@ require (
 	github.com/pelletier/go-toml v1.8.1 // indirect
 	github.com/peterh/liner v1.2.1 // indirect
 	github.com/prometheus/client_golang v1.9.0 // indirect
-	github.com/prometheus/procfs v0.3.0 // indirect
+	github.com/prometheus/procfs v0.4.0 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/shiena/ansicolor v0.0.0-20200904210342-c7312218db18 // indirect
 	github.com/sirupsen/logrus v1.7.0 // indirect
