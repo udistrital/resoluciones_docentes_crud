@@ -18,7 +18,7 @@ require (
 	github.com/pelletier/go-toml v1.8.1 // indirect
 	github.com/peterh/liner v1.2.1 // indirect
 	github.com/prometheus/client_golang v1.9.0 // indirect
-	github.com/prometheus/procfs v0.4.0 // indirect
+	github.com/prometheus/procfs v0.5.0 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/shiena/ansicolor v0.0.0-20200904210342-c7312218db18 // indirect
 	github.com/sirupsen/logrus v1.7.0 // indirect
@@ -29,7 +29,7 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/viper v1.7.1 // indirect
 	github.com/udistrital/utils_oas v0.0.0-20201230194626-bf49441f7130
-	go.starlark.net v0.0.0-20210126161401-bc864be25151 // indirect
+	go.starlark.net v0.0.0-20210208172022-0a10e4fe7402 // indirect
 	golang.org/x/arch v0.0.0-20210127225635-455c95562d18 // indirect
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad // indirect
 	golang.org/x/net v0.0.0-20210119194325-5f4716e94777 // indirect

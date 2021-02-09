@@ -53,7 +53,7 @@ func GetOneResolucionCompleta(idResolucion string) (resolucion ResolucionComplet
 	}
 
 	resolucionCompleta := ResolucionCompleta{Id: temp[0].Id, Consideracion: temp[0].ConsideracionResolucion, Preambulo: temp[0].PreambuloResolucion, Vigencia: temp[0].Vigencia, Numero: temp[0].NumeroResolucion, Titulo: temp[0].Titulo}
-
+	fmt.Println("--------- ", resolucionCompleta)
 	var arts []ComponenteResolucion
 	if _, err := o.QueryTable("componente_resolucion").Filter("resolucion_id", idRes).Filter("tipo_componente", "Articulo").OrderBy("numero").All(&arts); err != nil {
 		logs.Error(err)
@@ -66,7 +66,7 @@ func GetOneResolucionCompleta(idResolucion string) (resolucion ResolucionComplet
 		articulo := Articulo{Id: art.Id, Numero: art.Numero, Texto: art.Texto}
 
 		var pars []ComponenteResolucion
-		if _, err := o.QueryTable("componente_resolucion").Filter("resolucion_id", idRes).Filter("tipo_componente", "Paragrafo").Filter("componente_padre", articulo.Id).OrderBy("numero").All(&pars); err != nil {
+		if _, err := o.QueryTable("componente_resolucion").Filter("resolucion_id", idRes).Filter("tipo_componente", "Paragrafo").Filter("componente_resolucion_padre", articulo.Id).OrderBy("numero").All(&pars); err != nil {
 			logs.Error(err)
 			outputError = map[string]interface{}{"funcion": "/GetOneResolucionCompleta3", "err": err.Error(), "status": "500"}
 			return resolucion, outputError
