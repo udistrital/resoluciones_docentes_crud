@@ -303,6 +303,24 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
+	beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionController"] = append(beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionController"],
+		beego.ControllerComments{
+			Method:           "RestaurarResolucion",
+			Router:           "/RestaurarResolucion/:id",
+			AllowHTTPMethods: []string{"put"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionController"] = append(beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionController"],
+		beego.ControllerComments{
+			Method:           "GenerarResolucion",
+			Router:           "/GenerarResolucion",
+			AllowHTTPMethods: []string{"post"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 	beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionVinculacionController"] = append(beego.GlobalControllerRouter["github.com/udistrital/resoluciones_crud/controllers:ResolucionVinculacionController"],
 		beego.ControllerComments{
 			Method:           "GetAll",

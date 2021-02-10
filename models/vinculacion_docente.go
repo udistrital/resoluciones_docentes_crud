@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 )
 
@@ -165,6 +166,47 @@ func DeleteVinculacionDocente(id int) (err error) {
 		if num, err = o.Delete(&VinculacionDocente{Id: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
+	}
+	return
+}
+
+func GetTotalContratosXResolucion(id_resolucion string, dedicacion string) (totales int, err error) {
+	o := orm.NewOrm()
+	var temp float64
+	query := "SELECT SUM(valor_contrato)  FROM resoluciones.vinculacion_docente where id_resolucion=?"
+	if dedicacion == "TCO|MTO" {
+		query = "SELECT SUM(valor) FROM (SELECT SUM(DISTINCT(valor_contrato)) AS valor FROM resoluciones.vinculacion_docente WHERE id_resolucion=? GROUP BY id_persona) AS vinculaciones"
+	}
+	err = o.Raw(query, id_resolucion).QueryRow(&temp)
+	if err == nil {
+		fmt.Println("Consulta exitosa")
+		fmt.Println(int(temp))
+	}
+	return int(temp), err
+}
+
+func AddConjuntoVinculaciones(m []VinculacionDocente) (id int64, err error) {
+	o := orm.NewOrm()
+	err = o.Begin()
+	if err != nil {
+		beego.Error(err)
+	}
+	for _, vinculacion := range m {
+		vinculacion.Activo = true
+		vinculacion.FechaCreacion = time.Now()
+		id, err = o.Insert(&vinculacion)
+		fmt.Println("id de vinculacion insertada", id)
+		if err != nil {
+			err = o.Rollback()
+			if err != nil {
+				beego.Error(err)
+			}
+			return
+		}
+	}
+	err = o.Commit()
+	if err != nil {
+		beego.Error(err)
 	}
 	return
 }

@@ -24,6 +24,9 @@ func (c *VinculacionDocenteController) URLMapping() {
 	c.Mapping("GetAll", c.GetAll)
 	c.Mapping("Put", c.Put)
 	c.Mapping("Delete", c.Delete)
+	c.Mapping("GetTotalContratosXResolucion", c.GetTotalContratosXResolucion)
+	c.Mapping("InsertarVinculaciones", c.InsertarVinculaciones)
+
 }
 
 // Post ...
@@ -186,6 +189,47 @@ func (c *VinculacionDocenteController) Delete() {
 		logs.Error(err)
 		c.Data["mesaage"] = "Error service Delete: Request contains incorrect parameter"
 		c.Abort("404")
+	}
+	c.ServeJSON()
+}
+
+// GetTotalContratosXResolucion ...
+// @Title GetTotalContratosXResolucion
+// @Description Retorna el valor total de la contratación para la resolución
+// @Param id_resolucion query string false "nomina a listar"
+// @Success 201 {object} int
+// @Failure 403 body is empty
+// @router /get_total_contratos_x_resolucion/:id_resolucion/:dedicacion [get]
+func (c *VinculacionDocenteController) GetTotalContratosXResolucion() {
+	idStr := c.Ctx.Input.Param(":id_resolucion")
+	dedicacion := c.Ctx.Input.Param(":dedicacion")
+	v, err := models.GetTotalContratosXResolucion(idStr, dedicacion)
+	if err != nil {
+		c.Data["json"] = err.Error()
+	} else {
+		c.Data["json"] = v
+	}
+	c.ServeJSON()
+}
+
+// Post ...
+// @Title Post
+// @Description create VinculacionDocente
+// @Success 201 {int}
+// @Failure 403 body is empty
+// @router /InsertarVinculaciones [post]
+func (c *VinculacionDocenteController) InsertarVinculaciones() {
+	var v []models.VinculacionDocente
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+		if id, err := models.AddConjuntoVinculaciones(v); err == nil {
+
+			c.Ctx.Output.SetStatus(201)
+			c.Data["json"] = id
+		} else {
+			c.Data["json"] = err.Error()
+		}
+	} else {
+		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
 }

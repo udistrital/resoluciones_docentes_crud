@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS resoluciones.resolucion (
 	dependencia_id integer NOT NULL,
 	tipo_resolucion_id integer NOT NULL,
 	preambulo_resolucion character varying(3000) NOT NULL,
-	consideracion_resolucion character varying(3000) NOT NULL,
+	consideracion_resolucion character varying(15000) NOT NULL,
 	numero_semanas integer NOT NULL DEFAULT 0,
 	periodo integer NOT NULL DEFAULT 0,
 	titulo character varying(2000),

@@ -1254,6 +1254,61 @@
                 }
             }
         },
+        "/resolucion/GenerarResolucion": {
+            "post": {
+                "tags": [
+                    "resolucion"
+                ],
+                "description": "create Resolucion",
+                "operationId": "ResolucionController.Post",
+                "responses": {
+                    "201": {
+                        "description": "{int} models.Resolucion"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/resolucion/RestaurarResolucion/{id}": {
+            "put": {
+                "tags": [
+                    "resolucion"
+                ],
+                "description": "update the Resolucion",
+                "operationId": "ResolucionController.Restaurar",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The id you want to update",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Resolucion content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Resolucion"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Resolucion"
+                        }
+                    },
+                    "403": {
+                        "description": ":id is not int"
+                    }
+                }
+            }
+        },
         "/resolucion/{id}": {
             "get": {
                 "tags": [
@@ -1942,6 +1997,52 @@
                     },
                     "400": {
                         "description": "the request contains incorrect syntax"
+                    }
+                }
+            }
+        },
+        "/vinculacion_docente/InsertarVinculaciones": {
+            "post": {
+                "tags": [
+                    "vinculacion_docente"
+                ],
+                "description": "create VinculacionDocente",
+                "operationId": "VinculacionDocenteController.Post",
+                "responses": {
+                    "201": {
+                        "description": "{int}"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/vinculacion_docente/get_total_contratos_x_resolucion/{id_resolucion}/{dedicacion}": {
+            "get": {
+                "tags": [
+                    "vinculacion_docente"
+                ],
+                "description": "Retorna el valor total de la contratación para la resolución",
+                "operationId": "VinculacionDocenteController.GetTotalContratosXResolucion",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "id_resolucion",
+                        "description": "nomina a listar",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "format": "int64",
+                            "type": "integer"
+                        }
+                    },
+                    "403": {
+                        "description": "body is empty"
                     }
                 }
             }
