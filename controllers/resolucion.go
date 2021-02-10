@@ -5,7 +5,7 @@ import (
 	"errors"
 	"strconv"
 	"strings"
-
+	"fmt"
 	"github.com/udistrital/resoluciones_crud/models"
 
 	"github.com/astaxie/beego"
@@ -39,6 +39,8 @@ func (c *ResolucionController) URLMapping() {
 func (c *ResolucionController) Post() {
 	var v models.Resolucion
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+		fmt.Println("ASDAS")
+		//fmt.Println(v)
 		if _, err := models.AddResolucion(&v); err == nil {
 			c.Ctx.Output.SetStatus(201)
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "201", "Message": "Registration successful", "Data": v}

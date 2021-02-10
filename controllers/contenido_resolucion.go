@@ -61,7 +61,6 @@ func (c *ResolucionCompletaController) GetOne() {
 
 	idResolucion := c.Ctx.Input.Param(":idResolucion")
 	resolucion, err := models.GetOneResolucionCompleta(idResolucion)
-
 	if err != nil {
 		panic(err)
 	} else {
@@ -74,6 +73,7 @@ func (c *ResolucionCompletaController) GetOne() {
 // @Title Put
 // @Description update the ResolucionCompleta
 // @Param	idResolucion		path 	string	true		"The id you want to update"
+// @Param	body		body 	models.ResolucionCompleta	true		"body for ResolucionCompleta content"
 // @Success 200 {object} models.ResolucionCompleta
 // @Failure 403 :idResolucion is not int
 // @Failure 404 Not found
@@ -87,7 +87,22 @@ func (c *ResolucionCompletaController) Put() {
 	idResolucion, _ := strconv.Atoi(idResolucionStr)
 
 	v := models.ResolucionCompleta{Id: idResolucion}
+	var p map[string]interface{}
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &p); err == nil{
+		fmt.Println("asda")
+		fmt.Println(&p)
+		fmt.Println("PRUEBA")
+		fmt.Println(p)
+	}else{
+		fmt.Println("error")
+		fmt.Println(err)
+	}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+		/*fmt.Println("Contenido resolucion")
+		fmt.Println(&v)
+		fmt.Println("OTRA PRUEBA")
+		fmt.Println(v)*/
+
 		if err := models.UpdateResolucionCompletaById(&v); err == nil {
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": ""}
 		} else {

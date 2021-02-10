@@ -280,6 +280,15 @@
                         "description": "The id you want to update",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for ResolucionCompleta content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ResolucionCompleta"
+                        }
                     }
                 ],
                 "responses": {
