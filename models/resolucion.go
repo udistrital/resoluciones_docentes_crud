@@ -242,6 +242,7 @@ func GenerarResolucion(m *Resolucion) (id int64, err error) {
 	return
 }
 
+// se comenta porque  probablemente no se use y ademas consume dos bases de datos y esto es un error
 /*func CancelarResolucion(m *Resolucion) (err error) {
 	o := orm.NewOrm()
 	err = o.Begin()

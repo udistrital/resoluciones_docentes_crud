@@ -1,14 +1,12 @@
 package controllers
 
 import (
-	"database/sql"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"testing"
 	"time"
 
-	"github.com/go-testfixtures/testfixtures/v3"
 	_ "github.com/udistrital/resoluciones_crud/routers"
 
 	"github.com/astaxie/beego"
@@ -18,11 +16,11 @@ import (
 	. "github.com/smartystreets/goconvey/convey"
 )
 
-var o orm.Ormer
+/*var o orm.Ormer
 var (
 	db       *sql.DB
 	fixtures *testfixtures.Loader
-)
+)*/
 
 type ResolucionVinculacion struct {
 	Id                 int       `orm:"column(id );pk;auto"`
