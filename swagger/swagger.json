@@ -206,7 +206,7 @@
                     {
                         "in": "path",
                         "name": "nivel",
-                        "description": "Nivel de la dedicacion (PEGRADO, POSGRADO ....)",
+                        "description": "Nivel de la dedicacion (PREGRADO, POSGRADO ....)",
                         "required": true,
                         "type": "string"
                     }

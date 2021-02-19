@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 
 	"github.com/astaxie/beego"
@@ -24,7 +23,7 @@ func (c *ResolucionCompletaController) URLMapping() {
 // @Title Get Template
 // @Description Arma una resolucion a partir de la dedicacion y el nivel.(ResolucionTemplate)
 // @Param	dedicacion	path 	string	true		"Nombre de la dedicacion (HCP, HCH ...)"
-// @Param	nivel	path 	string	true		"Nivel de la dedicacion (PEGRADO, POSGRADO ....)"
+// @Param	nivel	path 	string	true		"Nivel de la dedicacion (PREGRADO, POSGRADO ....)"
 // @Success 200 {object} models.ResolucionCompleta
 // @Failure 404 Not found
 // @Failure 500 Internal Server Error
@@ -35,8 +34,6 @@ func (c *ResolucionCompletaController) ResolucionTemplate() {
 
 	dedicacion := c.Ctx.Input.Param(":dedicacion")
 	nivel := c.Ctx.Input.Param(":nivel")
-
-	fmt.Println("dedicacion", dedicacion, nivel)
 	resolucion, err := models.GetTemplateResolucion(dedicacion, nivel)
 	if err != nil {
 		panic(err)
@@ -87,16 +84,6 @@ func (c *ResolucionCompletaController) Put() {
 	idResolucion, _ := strconv.Atoi(idResolucionStr)
 
 	v := models.ResolucionCompleta{Id: idResolucion}
-	var p map[string]interface{}
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &p); err == nil{
-		fmt.Println("asda")
-		fmt.Println(&p)
-		fmt.Println("PRUEBA")
-		fmt.Println(p)
-	}else{
-		fmt.Println("error")
-		fmt.Println(err)
-	}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		/*fmt.Println("Contenido resolucion")
 		fmt.Println(&v)

@@ -63,7 +63,7 @@ func TestResolucionTemplate(t *testing.T) {
 	//t.Log(response)
 	Convey("Test: /Resolucion_template - Contenido resolucion  Endpoint\n", t, func() {
 		// peticion correcta
-		r, err := http.NewRequest("GET", "/v1/resolucion-template/:dedicacion/:nivel", nil)
+		r, err := http.NewRequest("GET", "/v1/contenido_resolucion/resolucion-template/HPC/PREGRADO", nil)
 		if err != nil {
 			t.Fatal("error", err)
 		}
@@ -84,16 +84,6 @@ func TestResolucionTemplate(t *testing.T) {
 		})
 		//data
 		// petición con datos incorrectos
-
-		Convey("Status Code Should Be 500", func() {
-			r, err = http.NewRequest("GET", "/v1/contenido_resolucion/resolucion-template/:dedicacion/:nivel", nil)
-			w = httptest.NewRecorder()
-			beego.BeeApp.Handlers.ServeHTTP(w, r)
-			So(w.Code, ShouldEqual, 500)
-		})
-		/*Convey("The Result Should Not Be Empty", func() {
-			So(w.Body.Len(), ShouldBeGreaterThan, 0)
-		})*/
 	})
 
 }
