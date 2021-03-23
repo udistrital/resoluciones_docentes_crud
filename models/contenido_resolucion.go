@@ -36,8 +36,8 @@ func GetOneResolucionCompleta(idResolucion string) (resolucion ResolucionComplet
 	defer func() {
 		if err := recover(); err != nil {
 			outputError = map[string]interface{}{"funcion": "GetOneResolucionCompleta", "err": err, "status": "500"}
-			//panic(outputError)
-			return
+			panic(outputError)
+			
 		}
 	}()
 
@@ -46,14 +46,13 @@ func GetOneResolucionCompleta(idResolucion string) (resolucion ResolucionComplet
 
 	var temp []Resolucion
 	if _, err := o.QueryTable("resolucion").Filter("id", idRes).All(&temp); err != nil {
-		logs.Error(err)
 		outputError = map[string]interface{}{"funcion": "/GetOneResolucionCompleta1", "err": err.Error(), "status": "500"}
 		return resolucion, outputError
 
 	}
 
 	resolucionCompleta := ResolucionCompleta{Id: temp[0].Id, Consideracion: temp[0].ConsideracionResolucion, Preambulo: temp[0].PreambuloResolucion, Vigencia: temp[0].Vigencia, Numero: temp[0].NumeroResolucion, Titulo: temp[0].Titulo}
-
+	fmt.Println("--------- ")
 	var arts []ComponenteResolucion
 	if _, err := o.QueryTable("componente_resolucion").Filter("resolucion_id", idRes).Filter("tipo_componente", "Articulo").OrderBy("numero").All(&arts); err != nil {
 		logs.Error(err)
@@ -66,7 +65,7 @@ func GetOneResolucionCompleta(idResolucion string) (resolucion ResolucionComplet
 		articulo := Articulo{Id: art.Id, Numero: art.Numero, Texto: art.Texto}
 
 		var pars []ComponenteResolucion
-		if _, err := o.QueryTable("componente_resolucion").Filter("resolucion_id", idRes).Filter("tipo_componente", "Paragrafo").Filter("componente_padre", articulo.Id).OrderBy("numero").All(&pars); err != nil {
+		if _, err := o.QueryTable("componente_resolucion").Filter("resolucion_id", idRes).Filter("tipo_componente", "Paragrafo").Filter("componente_resolucion_padre", articulo.Id).OrderBy("numero").All(&pars); err != nil {
 			logs.Error(err)
 			outputError = map[string]interface{}{"funcion": "/GetOneResolucionCompleta3", "err": err.Error(), "status": "500"}
 			return resolucion, outputError
@@ -82,6 +81,13 @@ func GetOneResolucionCompleta(idResolucion string) (resolucion ResolucionComplet
 
 		articulos = append(articulos, articulo)
 	}
+
+	var resolucion_vinculacion_docente ResolucionVinculacionDocente 
+	if _, err := o.QueryTable("resolucion_vinculacion_docente").Filter("id", idRes).All(&resolucion_vinculacion_docente); err != nil{
+		outputError = map[string]interface{}{"funcion": "/GetOneResolucionCompleta1", "err": err.Error(), "status": "500"}
+		return resolucion, outputError
+	}
+	resolucionCompleta.Vinculacion = resolucion_vinculacion_docente
 	resolucionCompleta.Articulos = articulos
 	return resolucionCompleta, nil //revisar
 }
@@ -90,14 +96,16 @@ func UpdateResolucionCompletaById(m *ResolucionCompleta) (outputError map[string
 	defer func() {
 		if err := recover(); err != nil {
 			outputError = map[string]interface{}{"funcion": "/UpdateResolucionCompletaById", "err": err, "status": "500"}
-			return
+			panic(outputError)
 		}
 	}()
 	o := orm.NewOrm()
-	v := Resolucion{Id: m.Id}
+	fmt.Println("ESTO ES M: ", m)
+	v := Resolucion{Id: 333}
+	fmt.Println("Esto es v ", v)
 	if err := o.Read(&v); err == nil {
 		v.NumeroResolucion = m.Numero
-		v.Titulo = m.Titulo
+		//v.Titulo = m.Titulo
 
 		if _, err := o.Update(&v); err != nil {
 			logs.Error(err)
@@ -111,8 +119,10 @@ func UpdateResolucionCompletaById(m *ResolucionCompleta) (outputError map[string
 	}
 	idResolucionStr := strconv.Itoa(m.Id)
 	r := m.Vinculacion
-	fmt.Println(r.Id)
+	fmt.Println("Vinculacion ES: ", m.Vinculacion)
+	fmt.Println("R ES: ", r.Id)
 	a := ResolucionVinculacionDocente{Id: r.Id}
+	fmt.Println("PRUEBA DE QUE ES A ", a)
 	if err := o.Read(&a); err == nil {
 		if _, err = o.Update(&r); err != nil {
 			logs.Error(err)
@@ -128,7 +138,6 @@ func UpdateResolucionCompletaById(m *ResolucionCompleta) (outputError map[string
 		v.ConsideracionResolucion = m.Consideracion
 		v.PreambuloResolucion = m.Preambulo
 		v.NumeroResolucion = m.Numero
-		fmt.Println(v)
 		if err := UpdateResolucionById(&v); err != nil {
 			logs.Error(err)
 			outputError = map[string]interface{}{"funcion": "/UpdateResolucionCompletaById", "err": err.Error(), "status": "500"}

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"strconv"
 	"strings"
-
+	"fmt"
 	"github.com/udistrital/resoluciones_crud/models"
 
 	"github.com/astaxie/beego"
@@ -24,6 +24,9 @@ func (c *ResolucionController) URLMapping() {
 	c.Mapping("GetAll", c.GetAll)
 	c.Mapping("Put", c.Put)
 	c.Mapping("Delete", c.Delete)
+	//c.Mapping("CancelarResolucion", c.CancelarResolucion)
+	c.Mapping("RestaurarResolucion", c.RestaurarResolucion)
+	c.Mapping("GenerarResolucion", c.GenerarResolucion)
 }
 
 // Post ...
@@ -36,6 +39,8 @@ func (c *ResolucionController) URLMapping() {
 func (c *ResolucionController) Post() {
 	var v models.Resolucion
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+		fmt.Println("ASDAS")
+		//fmt.Println(v)
 		if _, err := models.AddResolucion(&v); err == nil {
 			c.Ctx.Output.SetStatus(201)
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "201", "Message": "Registration successful", "Data": v}
@@ -186,6 +191,74 @@ func (c *ResolucionController) Delete() {
 		logs.Error(err)
 		c.Data["mesaage"] = "Error service Delete: Request contains incorrect parameter"
 		c.Abort("404")
+	}
+	c.ServeJSON()
+}
+
+// Put ...
+// @Title Cancelar
+// @Description update the Resolucion
+// @Param	id		path 	string	true		"The id you want to update"
+// @Success 200 {object} models.Resolucion
+// @Failure 403 :id is not int
+// @router /CancelarResolucion/:id [put]
+/*func (c *ResolucionController) CancelarResolucion() {
+	idStr := c.Ctx.Input.Param(":id")
+	id, _ := strconv.Atoi(idStr)
+	v := models.Resolucion{Id: id}
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+		if err := models.CancelarResolucion(&v); err == nil {
+			c.Data["json"] = "OK"
+		} else {
+			c.Data["json"] = err.Error()
+		}
+	} else {
+		c.Data["json"] = err.Error()
+	}
+	c.ServeJSON()
+}*/
+
+// Put ...
+// @Title Restaurar
+// @Description update the Resolucion
+// @Param	id		path 	string	true		"The id you want to update"
+// @Param	body		body 	models.Resolucion	true		"body for Resolucion content"
+// @Success 200 {object} models.Resolucion
+// @Failure 403 :id is not int
+// @router /RestaurarResolucion/:id [put]
+func (c *ResolucionController) RestaurarResolucion() {
+	idStr := c.Ctx.Input.Param(":id")
+	id, _ := strconv.Atoi(idStr)
+	v := models.Resolucion{Id: id}
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+		if err := models.RestaurarResolucion(&v); err == nil {
+			c.Data["json"] = "OK"
+		} else {
+			c.Data["json"] = err.Error()
+		}
+	} else {
+		c.Data["json"] = err.Error()
+	}
+	c.ServeJSON()
+}
+
+// Post ...
+// @Title Post
+// @Description create Resolucion
+// @Success 201 {int} models.Resolucion
+// @Failure 403 body is empty
+// @router /GenerarResolucion [post]
+func (c *ResolucionController) GenerarResolucion() {
+	var v models.Resolucion
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+		if _, err := models.GenerarResolucion(&v); err == nil {
+			c.Ctx.Output.SetStatus(201)
+			c.Data["json"] = v
+		} else {
+			c.Data["json"] = err.Error()
+		}
+	} else {
+		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
 }

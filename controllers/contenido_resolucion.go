@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 
 	"github.com/astaxie/beego"
@@ -24,7 +23,7 @@ func (c *ResolucionCompletaController) URLMapping() {
 // @Title Get Template
 // @Description Arma una resolucion a partir de la dedicacion y el nivel.(ResolucionTemplate)
 // @Param	dedicacion	path 	string	true		"Nombre de la dedicacion (HCP, HCH ...)"
-// @Param	nivel	path 	string	true		"Nivel de la dedicacion (PEGRADO, POSGRADO ....)"
+// @Param	nivel	path 	string	true		"Nivel de la dedicacion (PREGRADO, POSGRADO ....)"
 // @Success 200 {object} models.ResolucionCompleta
 // @Failure 404 Not found
 // @Failure 500 Internal Server Error
@@ -35,8 +34,6 @@ func (c *ResolucionCompletaController) ResolucionTemplate() {
 
 	dedicacion := c.Ctx.Input.Param(":dedicacion")
 	nivel := c.Ctx.Input.Param(":nivel")
-
-	fmt.Println("dedicacion", dedicacion, nivel)
 	resolucion, err := models.GetTemplateResolucion(dedicacion, nivel)
 	if err != nil {
 		panic(err)
@@ -61,7 +58,6 @@ func (c *ResolucionCompletaController) GetOne() {
 
 	idResolucion := c.Ctx.Input.Param(":idResolucion")
 	resolucion, err := models.GetOneResolucionCompleta(idResolucion)
-
 	if err != nil {
 		panic(err)
 	} else {
@@ -74,6 +70,7 @@ func (c *ResolucionCompletaController) GetOne() {
 // @Title Put
 // @Description update the ResolucionCompleta
 // @Param	idResolucion		path 	string	true		"The id you want to update"
+// @Param	body		body 	models.ResolucionCompleta	true		"body for ResolucionCompleta content"
 // @Success 200 {object} models.ResolucionCompleta
 // @Failure 403 :idResolucion is not int
 // @Failure 404 Not found
@@ -88,6 +85,11 @@ func (c *ResolucionCompletaController) Put() {
 
 	v := models.ResolucionCompleta{Id: idResolucion}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+		/*fmt.Println("Contenido resolucion")
+		fmt.Println(&v)
+		fmt.Println("OTRA PRUEBA")
+		fmt.Println(v)*/
+
 		if err := models.UpdateResolucionCompletaById(&v); err == nil {
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": ""}
 		} else {

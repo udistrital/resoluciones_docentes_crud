@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 )
 
@@ -164,3 +165,157 @@ func DeleteResolucion(id int) (err error) {
 	}
 	return
 }
+
+func RestaurarResolucion(m *Resolucion) (err error) {
+	o := orm.NewOrm()
+	err = o.Begin()
+	if err != nil {
+		beego.Error(err)
+	}
+	var num int64
+	if num, err = o.Update(m); err == nil {
+		var e ResolucionEstado
+		e.ResolucionId = m
+		e.EstadoResolucionId = &EstadoResolucion{Id: 1}
+		e.FechaCreacion = time.Now()
+		e.FechaModificacion = time.Now()
+		_, err = o.Insert(&e)
+		if err == nil {
+			fmt.Println("Number of records updated in database:", num)
+		} else {
+			err = o.Rollback()
+			if err != nil {
+				beego.Error(err)
+			}
+			return
+		}
+	} else {
+		err = o.Rollback()
+		if err != nil {
+			beego.Error(err)
+		}
+		return
+	}
+	err = o.Commit()
+	if err != nil {
+		beego.Error(err)
+	}
+	return
+}
+
+func GenerarResolucion(m *Resolucion) (id int64, err error) {
+	o := orm.NewOrm()
+	err = o.Begin()
+	if err != nil {
+		beego.Error(err)
+	}
+	m.Vigencia, _, _ = time.Now().Date()
+	m.FechaCreacion = time.Now()
+	m.Activo = true
+	m.TipoResolucionId = &TipoResolucion{Id: 1}
+	id, err = o.Insert(m)
+	if err == nil {
+		var e ResolucionEstado
+		e.ResolucionId = m
+		e.EstadoResolucionId = &EstadoResolucion{Id: 1}
+		e.FechaCreacion = time.Now()
+		e.FechaModificacion = time.Now()
+		_, err = o.Insert(&e)
+		if err != nil {
+			err = o.Rollback()
+			if err != nil {
+				beego.Error(err)
+			}
+			return
+		}
+	} else {
+		err = o.Rollback()
+		if err != nil {
+			beego.Error(err)
+		}
+		return
+	}
+	err = o.Commit()
+	if err != nil {
+		beego.Error(err)
+	}
+	return
+}
+
+// se comenta porque  probablemente no se use y ademas consume dos bases de datos y esto es un error
+/*func CancelarResolucion(m *Resolucion) (err error) {
+	o := orm.NewOrm()
+	err = o.Begin()
+	if err != nil {
+		beego.Error(err)
+	}
+	v := ResolucionVinculacionDocente{Id: m.Id}
+	if err = o.Read(&v); err == nil {
+		var vinculacion_docente []*VinculacionDocente
+		_, err = o.QueryTable("vinculacion_docente").Filter("id_resolucion", m.Id).Filter("estado", true).All(&vinculacion_docente)
+		for _, vd := range vinculacion_docente {
+			var contratos_generales []*ContratoGeneral
+			if vd.NumeroContrato.String != "" && vd.Vigencia.Int64 != 0 {
+				_, err = o.QueryTable("contrato_general").Filter("numero_contrato", vd.NumeroContrato).Filter("vigencia", vd.Vigencia).All(&contratos_generales)
+				if err == nil {
+					for _, c := range contratos_generales {
+						aux1 := c.Id
+						aux2 := c.VigenciaContrato
+						e := ContratoEstado{}
+						e.NumeroContrato = aux1
+						e.Vigencia = aux2
+						e.FechaRegistro = time.Now()
+						e.Estado = &EstadoContrato{Id: 7}
+						if _, err = o.Insert(&e); err != nil {
+							err = o.Rollback()
+							if err != nil {
+								beego.Error(err)
+							}
+							return
+						}
+					}
+				} else {
+					err = o.Rollback()
+					if err != nil {
+						beego.Error(err)
+					}
+					return
+				}
+			}
+		}
+		var num int64
+		if num, err = o.Update(m); err == nil {
+			var e ResolucionEstado
+			e.Resolucion = m
+			e.Estado = &EstadoResolucion{Id: 3}
+			e.FechaRegistro = time.Now()
+			_, err = o.Insert(&e)
+			if err == nil {
+				fmt.Println("Number of records updated in database:", num)
+			} else {
+				err = o.Rollback()
+				if err != nil {
+					beego.Error(err)
+				}
+				return
+			}
+		} else {
+			err = o.Rollback()
+			if err != nil {
+				beego.Error(err)
+			}
+			return
+		}
+	} else {
+		err = o.Rollback()
+		if err != nil {
+			beego.Error(err)
+		}
+		return
+	}
+	err = o.Commit()
+	if err != nil {
+		beego.Error(err)
+	}
+	return
+}*/
