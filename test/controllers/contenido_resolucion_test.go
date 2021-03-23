@@ -70,8 +70,6 @@ func TestResolucionTemplate(t *testing.T) {
 		w := httptest.NewRecorder()
 
 		beego.BeeApp.Handlers.ServeHTTP(w, r)
-		//var response = map[string]interface{}{}
-		//json.Unmarshal(w.Body.Bytes(), &response)
 
 		Convey("Status Code Should Be 200", func() {
 			So(w.Code, ShouldEqual, 200)
