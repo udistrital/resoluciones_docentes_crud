@@ -43,12 +43,35 @@ RESOLUCIONES_CRUD_HTTP_PORT=8080 RESOLUCIONES_CRUD_SOME_VARIABLE bee run
 ```
 
 ### Ejecución Dockerfile
-
+```shell
+# Implementado para despliegue del Sistema de integración continua CI.
+```
 
 ### Ejecución docker-compose
+```shell
+#1. Clonar el repositorio
+git clone -b develop https://github.com/udistrital/resoluciones_docentes_crud
 
+#2. Moverse a la carpeta del repositorio
+cd resoluciones_docentes_crud
+
+#3. Crear un fichero con el nombre **custom.env**
+touch custom.env
+
+#4. Crear la network **back_end** para los contenedores
+docker network create back_end
+
+#5. Ejecutar el compose del contenedor
+docker-compose up --build
+
+#6. Comprobar que los contenedores estén en ejecución
+docker ps
+```
 
 ### Ejecución Pruebas
+```shell
+# En Proceso
+```
 
 Pruebas unitarias
 ```shell
@@ -70,5 +93,4 @@ resoluciones_docentes_crud is free software: you can redistribute it and/or modi
 
 resoluciones_docentes_crud is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with novedades_crud. If not, see https://www.gnu.org/licenses/.
-
+You should have received a copy of the GNU General Public License along with resoluciones_docentes_crud. If not, see https://www.gnu.org/licenses/.
