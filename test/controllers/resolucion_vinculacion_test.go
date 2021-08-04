@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	_ "github.com/udistrital/resoluciones_crud/routers"
+	_ "github.com/udistrital/resoluciones_docentes_crud/routers"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"

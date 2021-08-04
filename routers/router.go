@@ -9,7 +9,7 @@
 package routers
 
 import (
-	"github.com/udistrital/resoluciones_crud/controllers"
+	"github.com/udistrital/resoluciones_docentes_crud/controllers"
 
 	"github.com/astaxie/beego"
 )
@@ -65,7 +65,7 @@ func init() {
 			),
 		),
 
-		beego.NSNamespace("/resolucion-vinculacion",
+		beego.NSNamespace("/resolucion_vinculacion",
 			beego.NSInclude(
 				&controllers.ResolucionVinculacionController{},
 			),

@@ -8,7 +8,7 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
-	"github.com/udistrital/resoluciones_crud/models"
+	"github.com/udistrital/resoluciones_docentes_crud/models"
 )
 
 type ResolucionVinculacionController struct {
@@ -211,7 +211,7 @@ func (c *ResolucionVinculacionController) GetAllExpedidasVigenciaPeriodoVinculac
 	if err := recover(); err != nil {
 		logs.Error(err)
 		localError := err.(map[string]interface{})
-		c.Data["mesaage"] = (beego.AppConfig.String("appname") + "/" + "ResolucionVinculacionController" + "/" + (localError["funcion"]).(string))
+		c.Data["message"] = (beego.AppConfig.String("appname") + "/" + "ResolucionVinculacionController" + "/" + (localError["funcion"]).(string))
 		c.Data["data"] = (localError["err"])
 		if status, ok := localError["status"]; ok {
 			c.Abort(status.(string))
@@ -225,8 +225,8 @@ func ErrorControl(c beego.Controller, controller string) {
 	if err := recover(); err != nil {
 		logs.Error(err)
 		localError := err.(map[string]interface{})
-		c.Data["mesaage"] = (beego.AppConfig.String("appname") + "/" + controller + "/" + (localError["funcion"]).(string))
-		//fmt.Println(c.Data["mesaage"])
+		c.Data["message"] = (beego.AppConfig.String("appname") + "/" + controller + "/" + (localError["funcion"]).(string))
+		//fmt.Println(c.Data["message"])
 		c.Data["data"] = (localError["err"])
 		if status, ok := localError["status"]; ok {
 			c.Abort(status.(string))

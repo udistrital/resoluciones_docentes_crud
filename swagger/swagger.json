@@ -188,7 +188,7 @@
                 }
             }
         },
-        "/contenido_resolucion/resolucion-template/{dedicacion}/{nivel}": {
+        "/contenido_resolucion/resolucion_template/{dedicacion}/{nivel}": {
             "get": {
                 "tags": [
                     "contenido_resolucion"
@@ -1005,180 +1005,6 @@
                 }
             }
         },
-        "/resolucion-vinculacion/": {
-            "get": {
-                "tags": [
-                    "resolucion-vinculacion"
-                ],
-                "description": "get ResolucionVinculacion",
-                "operationId": "ResolucionVinculacionController.Get All",
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "query",
-                        "description": "Filter. e.g. col1:v1,col2:v2 ...",
-                        "type": "string"
-                    },
-                    {
-                        "in": "query",
-                        "name": "fields",
-                        "description": "Fields returned. e.g. col1,col2 ...",
-                        "type": "string"
-                    },
-                    {
-                        "in": "query",
-                        "name": "sortby",
-                        "description": "Sorted-by fields. e.g. col1,col2 ...",
-                        "type": "string"
-                    },
-                    {
-                        "in": "query",
-                        "name": "order",
-                        "description": "Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ...",
-                        "type": "string"
-                    },
-                    {
-                        "in": "query",
-                        "name": "limit",
-                        "description": "Limit the size of result set. Must be an integer",
-                        "type": "string"
-                    },
-                    {
-                        "in": "query",
-                        "name": "offset",
-                        "description": "Start position of result set. Must be an integer",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/models.ResolucionVinculacionDocente"
-                        }
-                    },
-                    "403": {
-                        "description": ""
-                    }
-                }
-            }
-        },
-        "/resolucion-vinculacion/Aprobada": {
-            "get": {
-                "tags": [
-                    "resolucion-vinculacion"
-                ],
-                "description": "get ResolucionVinculacion",
-                "operationId": "ResolucionVinculacionController.Get All",
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "query",
-                        "description": "Filter. e.g. col1:v1,col2:v2 ...",
-                        "type": "string"
-                    },
-                    {
-                        "in": "query",
-                        "name": "fields",
-                        "description": "Fields returned. e.g. col1,col2 ...",
-                        "type": "string"
-                    },
-                    {
-                        "in": "query",
-                        "name": "sortby",
-                        "description": "Sorted-by fields. e.g. col1,col2 ...",
-                        "type": "string"
-                    },
-                    {
-                        "in": "query",
-                        "name": "order",
-                        "description": "Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ...",
-                        "type": "string"
-                    },
-                    {
-                        "in": "query",
-                        "name": "limit",
-                        "description": "Limit the size of result set. Must be an integer",
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    {
-                        "in": "query",
-                        "name": "offset",
-                        "description": "Start position of result set. Must be an integer",
-                        "type": "integer",
-                        "format": "int64"
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/models.ResolucionVinculacionDocente"
-                        }
-                    },
-                    "403": {
-                        "description": ""
-                    }
-                }
-            }
-        },
-        "/resolucion-vinculacion/expedidas_vigencia_periodo": {
-            "get": {
-                "tags": [
-                    "resolucion-vinculacion"
-                ],
-                "description": "Agrupa los contratos de una preliquidacion segun mes, año y nomina para preliquidaicones en estado CERRADA",
-                "operationId": "ResolucionVinculacionController.GetAllExpedidasVigenciaPeriodo",
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "vigencia",
-                        "description": "nomina a listar",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/models.Preliquidacion_x_contratos"
-                        }
-                    },
-                    "403": {
-                        "description": "body is empty"
-                    }
-                }
-            }
-        },
-        "/resolucion-vinculacion/expedidas_vigencia_periodo_vinculacion": {
-            "get": {
-                "tags": [
-                    "resolucion-vinculacion"
-                ],
-                "description": "Muestra resoluciones de tipo vinculación para cancelar y modificar",
-                "operationId": "ResolucionVinculacionController.GetAllExpedidasVigenciaPeriodoVinculacion",
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "vigencia",
-                        "description": "nomina a listar",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/models.Preliquidacion_x_contratos"
-                        }
-                    },
-                    "403": {
-                        "description": "body is empty"
-                    }
-                }
-            }
-        },
         "/resolucion/": {
             "get": {
                 "tags": [
@@ -1576,6 +1402,180 @@
                     },
                     "404": {
                         "description": "not found resource"
+                    }
+                }
+            }
+        },
+        "/resolucion_vinculacion/": {
+            "get": {
+                "tags": [
+                    "resolucion_vinculacion"
+                ],
+                "description": "get ResolucionVinculacion",
+                "operationId": "ResolucionVinculacionController.Get All",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "Filter. e.g. col1:v1,col2:v2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "fields",
+                        "description": "Fields returned. e.g. col1,col2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "sortby",
+                        "description": "Sorted-by fields. e.g. col1,col2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "order",
+                        "description": "Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "description": "Limit the size of result set. Must be an integer",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "offset",
+                        "description": "Start position of result set. Must be an integer",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResolucionVinculacionDocente"
+                        }
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/resolucion_vinculacion/Aprobada": {
+            "get": {
+                "tags": [
+                    "resolucion_vinculacion"
+                ],
+                "description": "get ResolucionVinculacion",
+                "operationId": "ResolucionVinculacionController.Get All",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "Filter. e.g. col1:v1,col2:v2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "fields",
+                        "description": "Fields returned. e.g. col1,col2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "sortby",
+                        "description": "Sorted-by fields. e.g. col1,col2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "order",
+                        "description": "Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "description": "Limit the size of result set. Must be an integer",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "offset",
+                        "description": "Start position of result set. Must be an integer",
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResolucionVinculacionDocente"
+                        }
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/resolucion_vinculacion/expedidas_vigencia_periodo": {
+            "get": {
+                "tags": [
+                    "resolucion_vinculacion"
+                ],
+                "description": "Agrupa los contratos de una preliquidacion segun mes, año y nomina para preliquidaicones en estado CERRADA",
+                "operationId": "ResolucionVinculacionController.GetAllExpedidasVigenciaPeriodo",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "vigencia",
+                        "description": "nomina a listar",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Preliquidacion_x_contratos"
+                        }
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/resolucion_vinculacion/expedidas_vigencia_periodo_vinculacion": {
+            "get": {
+                "tags": [
+                    "resolucion_vinculacion"
+                ],
+                "description": "Muestra resoluciones de tipo vinculación para cancelar y modificar",
+                "operationId": "ResolucionVinculacionController.GetAllExpedidasVigenciaPeriodoVinculacion",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "vigencia",
+                        "description": "nomina a listar",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Preliquidacion_x_contratos"
+                        }
+                    },
+                    "403": {
+                        "description": "body is empty"
                     }
                 }
             }

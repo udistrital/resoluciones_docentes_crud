@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/udistrital/resoluciones_crud/models"
+	"github.com/udistrital/resoluciones_docentes_crud/models"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
@@ -41,12 +41,12 @@ func (c *EstadoResolucionController) Post() {
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "201", "Message": "Registration successful", "Data": v}
 		} else {
 			logs.Error(err)
-			c.Data["mesaage"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
+			c.Data["message"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
 			c.Abort("400")
 		}
 	} else {
 		logs.Error(err)
-		c.Data["mesaage"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
+		c.Data["message"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
 		c.Abort("400")
 	}
 	c.ServeJSON()
@@ -65,7 +65,7 @@ func (c *EstadoResolucionController) GetOne() {
 	v, err := models.GetEstadoResolucionById(id)
 	if err != nil {
 		logs.Error(err)
-		c.Data["mesaage"] = "Error service GetOne: The request contains an incorrect parameter or no record exists"
+		c.Data["message"] = "Error service GetOne: The request contains an incorrect parameter or no record exists"
 		c.Abort("404")
 	} else {
 		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": v}
@@ -130,7 +130,7 @@ func (c *EstadoResolucionController) GetAll() {
 	l, err := models.GetAllEstadoResolucion(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		logs.Error(err)
-		c.Data["mesaage"] = "Error service GetAll: The request contains an incorrect parameter or no record exists"
+		c.Data["message"] = "Error service GetAll: The request contains an incorrect parameter or no record exists"
 		c.Abort("404")
 	} else {
 		if l == nil {
@@ -158,12 +158,12 @@ func (c *EstadoResolucionController) Put() {
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Update successful", "Data": v}
 		} else {
 			logs.Error(err)
-			c.Data["mesaage"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
+			c.Data["message"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
 			c.Abort("400")
 		}
 	} else {
 		logs.Error(err)
-		c.Data["mesaage"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
+		c.Data["message"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
 		c.Abort("400")
 	}
 	c.ServeJSON()
@@ -184,7 +184,7 @@ func (c *EstadoResolucionController) Delete() {
 		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Delete successful", "Data": d}
 	} else {
 		logs.Error(err)
-		c.Data["mesaage"] = "Error service Delete: Request contains incorrect parameter"
+		c.Data["message"] = "Error service Delete: Request contains incorrect parameter"
 		c.Abort("404")
 	}
 	c.ServeJSON()

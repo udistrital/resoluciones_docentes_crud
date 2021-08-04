@@ -7,8 +7,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/go-testfixtures/testfixtures/v3"
-	_ "github.com/udistrital/resoluciones_crud/routers"
+	"github.com/go-testfixtures/testfixtures"
+	_ "github.com/udistrital/resoluciones_docentes_crud/routers"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -22,6 +22,7 @@ var (
 	db       *sql.DB
 	fixtures *testfixtures.Loader
 )
+
 /*
 type Paragrafo struct {
 	Id     int
