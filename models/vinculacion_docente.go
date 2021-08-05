@@ -9,6 +9,7 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	"github.com/udistrital/utils_oas/time_bogota"
 )
 
 type VinculacionDocente struct {
@@ -31,8 +32,8 @@ type VinculacionDocente struct {
 	VigenciaRp                     float64                       `orm:"column(vigencia_rp);null"`
 	FechaInicio                    time.Time                     `orm:"column(fecha_inicio);type(timestamp without time zone);null"`
 	Activo                         bool                          `orm:"column(activo);null"`
-	FechaCreacion                  time.Time                     `orm:"column(fecha_creacion);type(timestamp without time zone)"`
-	FechaModificacion              time.Time                     `orm:"column(fecha_modificacion);type(timestamp without time zone);null"`
+	FechaCreacion                  string                        `orm:"column(fecha_creacion);type(timestamp without time zone)"`
+	FechaModificacion              string                        `orm:"column(fecha_modificacion);type(timestamp without time zone);null"`
 }
 
 func (t *VinculacionDocente) TableName() string {
@@ -173,9 +174,9 @@ func DeleteVinculacionDocente(id int) (err error) {
 func GetTotalContratosXResolucion(id_resolucion string, dedicacion string) (totales int, err error) {
 	o := orm.NewOrm()
 	var temp float64
-	query := "SELECT SUM(valor_contrato)  FROM resoluciones.vinculacion_docente where id_resolucion=?"
+	query := "SELECT SUM(valor_contrato)  FROM resoluciones.vinculacion_docente where resolucion_vinculacion_docente_id=?"
 	if dedicacion == "TCO|MTO" {
-		query = "SELECT SUM(valor) FROM (SELECT SUM(DISTINCT(valor_contrato)) AS valor FROM resoluciones.vinculacion_docente WHERE id_resolucion=? GROUP BY id_persona) AS vinculaciones"
+		query = "SELECT SUM(valor) FROM (SELECT SUM(DISTINCT(valor_contrato)) AS valor FROM resoluciones.vinculacion_docente WHERE resolucion_vinculacion_docente_id=? GROUP BY persona_id) AS vinculaciones"
 	}
 	err = o.Raw(query, id_resolucion).QueryRow(&temp)
 	if err == nil {
@@ -193,7 +194,8 @@ func AddConjuntoVinculaciones(m []VinculacionDocente) (id int64, err error) {
 	}
 	for _, vinculacion := range m {
 		vinculacion.Activo = true
-		vinculacion.FechaCreacion = time.Now()
+		vinculacion.FechaCreacion = time_bogota.TiempoBogotaFormato()
+		vinculacion.FechaModificacion = time_bogota.TiempoBogotaFormato()
 		id, err = o.Insert(&vinculacion)
 		fmt.Println("id de vinculacion insertada", id)
 		if err != nil {

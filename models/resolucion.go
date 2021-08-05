@@ -9,6 +9,7 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	"github.com/udistrital/utils_oas/time_bogota"
 )
 
 type Resolucion struct {
@@ -27,8 +28,8 @@ type Resolucion struct {
 	VigenciaCarga           int             `orm:"column(vigencia_carga);null"`
 	PeriodoCarga            int             `orm:"column(periodo_carga);null"`
 	Activo                  bool            `orm:"column(activo);null"`
-	FechaCreacion           time.Time       `orm:"column(fecha_creacion);type(timestamp without time zone)"`
-	FechaModificacion       time.Time       `orm:"column(fecha_modificacion);type(timestamp without time zone);null"`
+	FechaCreacion           string          `orm:"column(fecha_creacion);type(timestamp without time zone)"`
+	FechaModificacion       string          `orm:"column(fecha_modificacion);type(timestamp without time zone);null"`
 }
 
 func (t *Resolucion) TableName() string {
@@ -177,8 +178,8 @@ func RestaurarResolucion(m *Resolucion) (err error) {
 		var e ResolucionEstado
 		e.ResolucionId = m
 		e.EstadoResolucionId = &EstadoResolucion{Id: 1}
-		e.FechaCreacion = time.Now()
-		e.FechaModificacion = time.Now()
+		e.FechaCreacion = time_bogota.TiempoBogotaFormato()
+		e.FechaModificacion = time_bogota.TiempoBogotaFormato()
 		_, err = o.Insert(&e)
 		if err == nil {
 			fmt.Println("Number of records updated in database:", num)
@@ -210,7 +211,8 @@ func GenerarResolucion(m *Resolucion) (id int64, err error) {
 		beego.Error(err)
 	}
 	m.Vigencia, _, _ = time.Now().Date()
-	m.FechaCreacion = time.Now()
+	m.FechaCreacion = time_bogota.TiempoBogotaFormato()
+	m.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	m.Activo = true
 	m.TipoResolucionId = &TipoResolucion{Id: 1}
 	id, err = o.Insert(m)
@@ -218,8 +220,8 @@ func GenerarResolucion(m *Resolucion) (id int64, err error) {
 		var e ResolucionEstado
 		e.ResolucionId = m
 		e.EstadoResolucionId = &EstadoResolucion{Id: 1}
-		e.FechaCreacion = time.Now()
-		e.FechaModificacion = time.Now()
+		e.FechaCreacion = time_bogota.TiempoBogotaFormato()
+		e.FechaModificacion = time_bogota.TiempoBogotaFormato()
 		_, err = o.Insert(&e)
 		if err != nil {
 			err = o.Rollback()

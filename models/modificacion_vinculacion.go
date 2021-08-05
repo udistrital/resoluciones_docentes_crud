@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-	"time"
 
 	"github.com/astaxie/beego/orm"
 )
@@ -17,8 +16,8 @@ type ModificacionVinculacion struct {
 	VinculacionDocenteRegistradaId *VinculacionDocente     `orm:"column(vinculacion_docente_registrada_id);rel(fk)"`
 	Horas                          float64                 `orm:"column(horas);null"`
 	Activo                         bool                    `orm:"column(activo);null"`
-	FechaCreacion                  time.Time               `orm:"column(fecha_creacion);type(timestamp without time zone);null"`
-	FechaModificacion              time.Time               `orm:"column(fecha_modificacion);type(timestamp without time zone);null"`
+	FechaCreacion                  string                  `orm:"column(fecha_creacion);type(timestamp without time zone);null"`
+	FechaModificacion              string                  `orm:"column(fecha_modificacion);type(timestamp without time zone);null"`
 }
 
 func (t *ModificacionVinculacion) TableName() string {

@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/astaxie/beego/orm"
-	"github.com/udistrital/resoluciones_crud/models"
-	_ "github.com/udistrital/resoluciones_crud/routers"
+	"github.com/udistrital/resoluciones_docentes_crud/models"
+	_ "github.com/udistrital/resoluciones_docentes_crud/routers"
 
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"

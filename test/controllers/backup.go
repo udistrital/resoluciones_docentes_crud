@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	_ "github.com/udistrital/resoluciones_crud/routers"
+	_ "github.com/udistrital/resoluciones_docentes_crud/routers"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/astaxie/beego"
