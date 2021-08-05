@@ -5,17 +5,16 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-	"time"
 
 	"github.com/astaxie/beego/orm"
 )
 
 type EstadoResolucion struct {
-	Id                int       `orm:"column(id);pk;auto"`
-	NombreEstado      string    `orm:"column(nombre_estado)"`
-	Activo            bool      `orm:"column(activo);null"`
-	FechaCreacion     time.Time `orm:"column(fecha_creacion);type(timestamp without time zone)"`
-	FechaModificacion time.Time `orm:"column(fecha_modificacion);type(timestamp without time zone);null"`
+	Id                int    `orm:"column(id);pk;auto"`
+	NombreEstado      string `orm:"column(nombre_estado)"`
+	Activo            bool   `orm:"column(activo);null"`
+	FechaCreacion     string `orm:"column(fecha_creacion);type(timestamp without time zone)"`
+	FechaModificacion string `orm:"column(fecha_modificacion);type(timestamp without time zone);null"`
 }
 
 func (t *EstadoResolucion) TableName() string {

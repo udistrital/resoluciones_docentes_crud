@@ -3,11 +3,11 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 
 	"github.com/udistrital/resoluciones_docentes_crud/models"
+	"github.com/udistrital/utils_oas/time_bogota"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
@@ -40,8 +40,8 @@ func (c *ResolucionController) URLMapping() {
 func (c *ResolucionController) Post() {
 	var v models.Resolucion
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		fmt.Println("ASDAS")
-		//fmt.Println(v)
+		v.FechaCreacion = time_bogota.TiempoBogotaFormato()
+		v.FechaModificacion = time_bogota.TiempoBogotaFormato()
 		if _, err := models.AddResolucion(&v); err == nil {
 			c.Ctx.Output.SetStatus(201)
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "201", "Message": "Registration successful", "Data": v}
@@ -160,6 +160,8 @@ func (c *ResolucionController) Put() {
 	id, _ := strconv.Atoi(idStr)
 	v := models.Resolucion{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+		v.FechaCreacion = time_bogota.TiempoCorreccionFormato(v.FechaCreacion)
+		v.FechaModificacion = time_bogota.TiempoBogotaFormato()
 		if err := models.UpdateResolucionById(&v); err == nil {
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Update successful", "Data": v}
 		} else {
@@ -232,6 +234,8 @@ func (c *ResolucionController) RestaurarResolucion() {
 	id, _ := strconv.Atoi(idStr)
 	v := models.Resolucion{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+		v.FechaCreacion = time_bogota.TiempoCorreccionFormato(v.FechaCreacion)
+		v.FechaModificacion = time_bogota.TiempoBogotaFormato()
 		if err := models.RestaurarResolucion(&v); err == nil {
 			c.Data["json"] = "OK"
 		} else {

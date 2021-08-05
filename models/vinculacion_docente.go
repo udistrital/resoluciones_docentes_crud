@@ -9,6 +9,7 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	"github.com/udistrital/utils_oas/time_bogota"
 )
 
 type VinculacionDocente struct {
@@ -31,8 +32,8 @@ type VinculacionDocente struct {
 	VigenciaRp                     float64                       `orm:"column(vigencia_rp);null"`
 	FechaInicio                    time.Time                     `orm:"column(fecha_inicio);type(timestamp without time zone);null"`
 	Activo                         bool                          `orm:"column(activo);null"`
-	FechaCreacion                  time.Time                     `orm:"column(fecha_creacion);type(timestamp without time zone)"`
-	FechaModificacion              time.Time                     `orm:"column(fecha_modificacion);type(timestamp without time zone);null"`
+	FechaCreacion                  string                        `orm:"column(fecha_creacion);type(timestamp without time zone)"`
+	FechaModificacion              string                        `orm:"column(fecha_modificacion);type(timestamp without time zone);null"`
 }
 
 func (t *VinculacionDocente) TableName() string {
@@ -193,7 +194,8 @@ func AddConjuntoVinculaciones(m []VinculacionDocente) (id int64, err error) {
 	}
 	for _, vinculacion := range m {
 		vinculacion.Activo = true
-		vinculacion.FechaCreacion = time.Now()
+		vinculacion.FechaCreacion = time_bogota.TiempoBogotaFormato()
+		vinculacion.FechaModificacion = time_bogota.TiempoBogotaFormato()
 		id, err = o.Insert(&vinculacion)
 		fmt.Println("id de vinculacion insertada", id)
 		if err != nil {

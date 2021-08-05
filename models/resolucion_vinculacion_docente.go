@@ -5,19 +5,18 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-	"time"
 
 	"github.com/astaxie/beego/orm"
 )
 
 type ResolucionVinculacionDocente struct {
-	Id                int       `orm:"column(id);pk;auto"`
-	FacultadId        int       `orm:"column(facultad_id)"`
-	Dedicacion        string    `orm:"column(dedicacion)"`
-	NivelAcademico    string    `orm:"column(nivel_academico)"`
-	Activo            bool      `orm:"column(activo);null"`
-	FechaCreacion     time.Time `orm:"column(fecha_creacion);type(timestamp without time zone);null"`
-	FechaModificacion time.Time `orm:"column(fecha_modificacion);type(timestamp without time zone);null"`
+	Id                int    `orm:"column(id);pk;auto"`
+	FacultadId        int    `orm:"column(facultad_id)"`
+	Dedicacion        string `orm:"column(dedicacion)"`
+	NivelAcademico    string `orm:"column(nivel_academico)"`
+	Activo            bool   `orm:"column(activo);null"`
+	FechaCreacion     string `orm:"column(fecha_creacion);type(timestamp without time zone);null"`
+	FechaModificacion string `orm:"column(fecha_modificacion);type(timestamp without time zone);null"`
 }
 
 func (t *ResolucionVinculacionDocente) TableName() string {
