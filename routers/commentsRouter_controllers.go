@@ -556,4 +556,22 @@ func init() {
             Filters: nil,
             Params: nil})
 
+    beego.GlobalControllerRouter["github.com/udistrital/resoluciones_docentes_crud/controllers:VinculacionDocenteController"] = append(beego.GlobalControllerRouter["github.com/udistrital/resoluciones_docentes_crud/controllers:VinculacionDocenteController"],
+        beego.ControllerComments{
+            Method: "GetValoresTotalesPorDisponibilidad",
+            Router: "/get_valores_totales_x_disponibilidad/:anio/:periodo/:id_disponibilidad",
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/udistrital/resoluciones_docentes_crud/controllers:VinculacionDocenteController"] = append(beego.GlobalControllerRouter["github.com/udistrital/resoluciones_docentes_crud/controllers:VinculacionDocenteController"],
+        beego.ControllerComments{
+            Method: "GetVinculacionesAgrupadas",
+            Router: "/get_vinculaciones_agrupadas/:id_resolucion",
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
 }
