@@ -229,9 +229,8 @@ func (c *VinculacionDocenteController) InsertarVinculaciones() {
 	var v []models.VinculacionDocente
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if id, err := models.AddConjuntoVinculaciones(v); err == nil {
-
 			c.Ctx.Output.SetStatus(201)
-			c.Data["json"] = id
+			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": id}
 		} else {
 			logs.Error(err)
 			c.Data["message"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
