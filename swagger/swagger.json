@@ -1096,9 +1096,23 @@
                 ],
                 "description": "create Resolucion",
                 "operationId": "ResolucionController.Post",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Resolucion content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Resolucion"
+                        }
+                    }
+                ],
                 "responses": {
                     "201": {
                         "description": "{int} models.Resolucion"
+                    },
+                    "400": {
+                        "description": "the request contains incorrect syntax"
                     },
                     "403": {
                         "description": "body is empty"
@@ -1137,6 +1151,9 @@
                         "schema": {
                             "$ref": "#/definitions/models.Resolucion"
                         }
+                    },
+                    "400": {
+                        "description": "the request contains incorrect syntax"
                     },
                     "403": {
                         "description": ":id is not int"
@@ -2016,6 +2033,71 @@
                     },
                     "403": {
                         "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/vinculacion_docente/get_valores_totales_x_disponibilidad/{anio}/{periodo}/{id_disponibilidad}": {
+            "get": {
+                "tags": [
+                    "vinculacion_docente"
+                ],
+                "description": "se obtiene el valor total que ha sido apartado para cierta disponibilidad",
+                "operationId": "VinculacionDocenteController.GetValoresTotalesPorDisponibilidad",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "anio",
+                        "description": "true",
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "periodo",
+                        "description": "true",
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "id_disponibilidad",
+                        "description": "true",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{int}"
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/vinculacion_docente/get_vinculaciones_agrupadas/{id_resolucion}": {
+            "get": {
+                "tags": [
+                    "vinculacion_docente"
+                ],
+                "description": "get vinculaciones agrupadas por docente",
+                "operationId": "VinculacionDocenteController.GetVinculacionesAgrupadas",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id_resolucion",
+                        "description": "true",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.VinculacionDocente"
+                        }
+                    },
+                    "403": {
+                        "description": ":id is empty"
                     }
                 }
             }

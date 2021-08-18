@@ -228,6 +228,7 @@ func (c *ResolucionController) Delete() {
 // @Param	body		body 	models.Resolucion	true		"body for Resolucion content"
 // @Success 200 {object} models.Resolucion
 // @Failure 403 :id is not int
+// @Failure 400 the request contains incorrect syntax
 // @router /RestaurarResolucion/:id [put]
 func (c *ResolucionController) RestaurarResolucion() {
 	idStr := c.Ctx.Input.Param(":id")
@@ -237,12 +238,16 @@ func (c *ResolucionController) RestaurarResolucion() {
 		v.FechaCreacion = time_bogota.TiempoCorreccionFormato(v.FechaCreacion)
 		v.FechaModificacion = time_bogota.TiempoBogotaFormato()
 		if err := models.RestaurarResolucion(&v); err == nil {
-			c.Data["json"] = "OK"
+			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": v}
 		} else {
-			c.Data["json"] = err.Error()
+			logs.Error(err)
+			c.Data["message"] = err.Error()
+			c.Abort("400")
 		}
 	} else {
-		c.Data["json"] = err.Error()
+		logs.Error(err)
+		c.Data["message"] = err.Error()
+		c.Abort("403")
 	}
 	c.ServeJSON()
 }
@@ -250,20 +255,26 @@ func (c *ResolucionController) RestaurarResolucion() {
 // Post ...
 // @Title Post
 // @Description create Resolucion
+// @Param	body		body 	models.Resolucion	true		"body for Resolucion content"
 // @Success 201 {int} models.Resolucion
 // @Failure 403 body is empty
+// @Failure 400 the request contains incorrect syntax
 // @router /GenerarResolucion [post]
 func (c *ResolucionController) GenerarResolucion() {
 	var v models.Resolucion
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if _, err := models.GenerarResolucion(&v); err == nil {
 			c.Ctx.Output.SetStatus(201)
-			c.Data["json"] = v
+			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": v}
 		} else {
-			c.Data["json"] = err.Error()
+			logs.Error(err)
+			c.Data["message"] = err.Error()
+			c.Abort("400")
 		}
 	} else {
-		c.Data["json"] = err.Error()
+		logs.Error(err)
+		c.Data["message"] = err.Error()
+		c.Abort("403")
 	}
 	c.ServeJSON()
 }

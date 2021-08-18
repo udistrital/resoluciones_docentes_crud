@@ -75,6 +75,9 @@ func GetAllVinculacionDocente(query map[string]string, fields []string, sortby [
 		k = strings.Replace(k, ".", "__", -1)
 		if strings.Contains(k, "isnull") {
 			qs = qs.Filter(k, (v == "true" || v == "1"))
+		} else if strings.Contains(k, "__in") {
+			arr := strings.Split(v, "|")
+			qs = qs.Filter(k, arr)
 		} else {
 			qs = qs.Filter(k, v)
 		}
@@ -169,6 +172,29 @@ func DeleteVinculacionDocente(id int) (err error) {
 		}
 	}
 	return
+}
+
+func GetVinculacionesAgrupadas(id string) (v []VinculacionDocente, er error) {
+	o := orm.NewOrm()
+
+	var temp []VinculacionDocente
+	_, err := o.Raw("SELECT vd.* FROM resoluciones.vinculacion_docente vd JOIN (SELECT vd.persona_id, MAX(vd.id) AS id FROM resoluciones.vinculacion_docente vd JOIN (SELECT resolucion_vinculacion_docente_id, persona_id, MAX(numero_horas_semanales) FROM resoluciones.vinculacion_docente GROUP BY resolucion_vinculacion_docente_id, persona_id)TAB1 ON vd.resolucion_vinculacion_docente_id=TAB1.resolucion_vinculacion_docente_id AND vd.persona_id=TAB1.persona_id AND vd.numero_horas_semanales=TAB1.max WHERE vd.resolucion_vinculacion_docente_id=? GROUP BY vd.persona_id)TAB1 ON vd.id = TAB1.id", id).QueryRows(&temp)
+	if err == nil {
+		fmt.Println("Consulta exitosa")
+	}
+	return temp, err
+}
+
+func GetValoresTotalesPorDisponibilidad(anio, periodo, id_disponibilidad string) (totales int, er error) {
+	o := orm.NewOrm()
+	var temp float64
+
+	err := o.Raw("SELECT SUM(valor_contrato) FROM resoluciones.vinculacion_docente vd, resoluciones.resolucion res WHERE vd.resolucion_vinculacion_docente_id = res.id AND res.vigencia = ? AND res.periodo = ? AND vd.disponibilidad = ?;", anio, periodo, id_disponibilidad).QueryRow(&temp)
+	if err == nil {
+		fmt.Println("Consulta exitosa")
+
+	}
+	return int(temp), err
 }
 
 func GetTotalContratosXResolucion(id_resolucion string, dedicacion string) (totales int, err error) {
