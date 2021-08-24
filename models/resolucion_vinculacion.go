@@ -13,20 +13,20 @@ import (
 )
 
 type ResolucionVinculacion struct {
-	Id                 int       `orm:"column(id );pk;auto"`
-	Estado             string    `orm:"column(estado )"`
-	Numero             string    `orm:"column(numero )"`
-	Vigencia           int       `orm:"column(vigencia )"`
-	Facultad           int       `orm:"column(facultad )"`
-	NivelAcademico     string    `orm:"column(nivel_academico )"`
-	Dedicacion         string    `orm:"column(dedicacion )"`
-	FechaExpedicion    time.Time `orm:"column(fecha_expedicion );type(timestamp without time zone)"`
-	NumeroSemanas      int       `orm:"column(numero_semanas )"`
-	Periodo            int       `orm:"column(periodo )"`
-	TipoResolucion     string    `orm:"column(tipo_resolucion )"`
-	IdDependenciaFirma int       `orm:"column(dependencia_firma )"`
-	PeriodoCarga       int       `orm:"column(periodo_carga )"`
-	VigenciaCarga      int       `orm:"column(vigencia_carga )"`
+	Id                 int       `orm:"column(id);pk;auto"`
+	Estado             string    `orm:"column(estado)"`
+	Numero             string    `orm:"column(numero)"`
+	Vigencia           int       `orm:"column(vigencia)"`
+	Facultad           int       `orm:"column(facultad)"`
+	NivelAcademico     string    `orm:"column(nivel_academico)"`
+	Dedicacion         string    `orm:"column(dedicacion)"`
+	FechaExpedicion    time.Time `orm:"column(fecha_expedicion);type(timestamp without time zone)"`
+	NumeroSemanas      int       `orm:"column(numero_semanas)"`
+	Periodo            int       `orm:"column(periodo)"`
+	TipoResolucion     string    `orm:"column(tipo_resolucion)"`
+	IdDependenciaFirma int       `orm:"column(dependencia_firma)"`
+	PeriodoCarga       int       `orm:"column(periodo_carga)"`
+	VigenciaCarga      int       `orm:"column(vigencia_carga)"`
 }
 
 const DEFAULTMAXTEMS = 10000
@@ -42,7 +42,10 @@ func init() {
 		field := t.Field(i)
 		tag := field.Tag.Get("orm")
 		column := ""
-		_, err := fmt.Sscanf(strings.Split(tag, ";")[0], "column(%s )", &column)
+		if strings.Contains(tag, ";") {
+			tag = strings.Split(tag, ";")[0]
+		}
+		_, err := fmt.Sscanf(tag, "column(%s)", &column)
 		if err != nil {
 			beego.Error(err)
 		}
@@ -113,7 +116,7 @@ func GetAllResolucionVinculacion(query map[string]string, offset int64, limit in
 		And("r.tipo_resolucion_id=tipo.id").
 		And("re.estado_resolucion_id=e.id").
 		And("re.estado_resolucion_id!=6").
-		And("re.fecha_modificacion=(SELECT MAX(re_aux.fecha_modificacion) FROM resoluciones.resolucion_estado re_aux WHERE re_aux.resolucion_id=r.id)")
+		And("re.fecha_creacion=(SELECT MAX(re_aux.fecha_creacion) FROM resoluciones.resolucion_estado re_aux WHERE re_aux.resolucion_id=r.id)")
 
 	qb2, err := orm.NewQueryBuilder("mysql")
 	if err != nil {
@@ -223,7 +226,7 @@ func GetAllResolucionAprobada(query map[string]string, offset int64, limit int64
 		Where("r.id=rv.id").
 		And("re.resolucion_id=r.id").
 		And("re.estado_resolucion_id=e.id").
-		And("re.fecha_modificacion=(SELECT MAX(re_aux.fecha_modificacion) FROM resoluciones.resolucion_estado re_aux WHERE re_aux.resolucion_id=r.id) AND e.nombre_estado IN('Aprobada','Expedida')").
+		And("re.fecha_creacion=(SELECT MAX(re_aux.fecha_creacion) FROM resoluciones.resolucion_estado re_aux WHERE re_aux.resolucion_id=r.id) AND e.nombre_estado IN('Aprobada','Expedida')").
 		And("tr.id=r.tipo_resolucion_id")
 
 	qb2, err := orm.NewQueryBuilder("mysql")
@@ -283,8 +286,8 @@ func GetAllExpedidasVigenciaPeriodo(vigencia int) (arregloIDs []ResolucionVincul
 
 	o := orm.NewOrm()
 	var temp []ResolucionVinculacion
-	//_, err := o.Raw("SELECT DISTINCT r.id id, e.nombre_estado estado, r.numero_resolucion numero, r.vigencia vigencia, r.periodo periodo, rv.facultad_id facultad, rv.nivel_academico nivel_academico, rv.dedicacion dedicacion, r.numero_semanas numero_semanas,r.fecha_expedicion fecha_expedicion FROM resoluciones.resolucion r, resoluciones.resolucion_vinculacion_docente rv, resoluciones.resolucion_estado re, resoluciones.estado_resolucion e WHERE r.id=rv.id AND re.resolucion_id=r.id AND re.estado_resolucion_id=e.id AND re.fecha_registro=(SELECT MAX(re_aux.fecha_registro) FROM resoluciones.resolucion_estado re_aux WHERE re_aux.resolucion_id=r.id) AND r.vigencia = ? AND e.nombre_estado IN('Expedida') ORDER BY id desc;", vigencia).QueryRows(&temp)
-	_, err := o.Raw("SELECT id FROM resoluciones.resolucion").QueryRows(&temp)
+	_, err := o.Raw("SELECT DISTINCT r.id id, e.nombre_estado estado, r.numero_resolucion numero, r.vigencia vigencia, r.periodo periodo, rv.facultad_id facultad, rv.nivel_academico nivel_academico, rv.dedicacion dedicacion, r.numero_semanas numero_semanas,r.fecha_expedicion fecha_expedicion FROM resoluciones.resolucion r, resoluciones.resolucion_vinculacion_docente rv, resoluciones.resolucion_estado re, resoluciones.estado_resolucion e WHERE r.id=rv.id AND re.resolucion_id=r.id AND re.estado_resolucion_id=e.id AND re.fecha_creacion=(SELECT MAX(re_aux.fecha_creacion) FROM resoluciones.resolucion_estado re_aux WHERE re_aux.resolucion_id=r.id) AND r.vigencia = ? AND e.nombre_estado IN('Expedida') ORDER BY id desc;", vigencia).QueryRows(&temp)
+	//_, err := o.Raw("SELECT id FROM resoluciones.resolucion").QueryRows(&temp)
 
 	if err != nil {
 		logs.Error(err)
@@ -311,7 +314,7 @@ func GetAllExpedidasVigenciaPeriodoVinculacion(vigencia int) (arregloIDs []Resol
 
 	o := orm.NewOrm()
 	var temp []ResolucionVinculacion
-	_, err := o.Raw("SELECT DISTINCT r.id id, e.nombre_estado estado, r.numero_resolucion numero, r.vigencia vigencia, r.periodo periodo, rv.facultad_id facultad, rv.nivel_academico nivel_academico, rv.dedicacion dedicacion, r.numero_semanas numero_semanas,r.fecha_expedicion fecha_expedicion FROM resoluciones.resolucion r, resoluciones.resolucion_vinculacion_docente rv, resoluciones.resolucion_estado re, resoluciones.estado_resolucion e WHERE r.id=rv.id AND re.resolucion_id=r.id AND re.estado_resolucion_id=e.id AND re.fecha_modificacion=(SELECT MAX(re_aux.fecha_modificacion) FROM resoluciones.resolucion_estado re_aux WHERE re_aux.resolucion_id=r.id) AND r.vigencia = ? AND e.nombre_estado IN('Expedida') AND r.tipo_resolucion_id IN (1,3,4) ORDER BY id desc;", vigencia).QueryRows(&temp)
+	_, err := o.Raw("SELECT DISTINCT r.id id, e.nombre_estado estado, r.numero_resolucion numero, r.vigencia vigencia, r.periodo periodo, rv.facultad_id facultad, rv.nivel_academico nivel_academico, rv.dedicacion dedicacion, r.numero_semanas numero_semanas,r.fecha_expedicion fecha_expedicion FROM resoluciones.resolucion r, resoluciones.resolucion_vinculacion_docente rv, resoluciones.resolucion_estado re, resoluciones.estado_resolucion e WHERE r.id=rv.id AND re.resolucion_id=r.id AND re.estado_resolucion_id=e.id AND re.fecha_creacion=(SELECT MAX(re_aux.fecha_creacion) FROM resoluciones.resolucion_estado re_aux WHERE re_aux.resolucion_id=r.id) AND r.vigencia = ? AND e.nombre_estado IN('Expedida') AND r.tipo_resolucion_id IN (1,3,4) ORDER BY id desc;", vigencia).QueryRows(&temp)
 
 	if err != nil {
 		logs.Error(err)
