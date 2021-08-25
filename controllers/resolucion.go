@@ -5,8 +5,9 @@ import (
 	"errors"
 	"strconv"
 	"strings"
-	"fmt"
-	"github.com/udistrital/resoluciones_crud/models"
+
+	"github.com/udistrital/resoluciones_docentes_crud/models"
+	"github.com/udistrital/utils_oas/time_bogota"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
@@ -39,19 +40,19 @@ func (c *ResolucionController) URLMapping() {
 func (c *ResolucionController) Post() {
 	var v models.Resolucion
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		fmt.Println("ASDAS")
-		//fmt.Println(v)
+		v.FechaCreacion = time_bogota.TiempoBogotaFormato()
+		v.FechaModificacion = time_bogota.TiempoBogotaFormato()
 		if _, err := models.AddResolucion(&v); err == nil {
 			c.Ctx.Output.SetStatus(201)
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "201", "Message": "Registration successful", "Data": v}
 		} else {
 			logs.Error(err)
-			c.Data["mesaage"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
+			c.Data["message"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
 			c.Abort("400")
 		}
 	} else {
 		logs.Error(err)
-		c.Data["mesaage"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
+		c.Data["message"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
 		c.Abort("400")
 	}
 	c.ServeJSON()
@@ -70,7 +71,7 @@ func (c *ResolucionController) GetOne() {
 	v, err := models.GetResolucionById(id)
 	if err != nil {
 		logs.Error(err)
-		c.Data["mesaage"] = "Error service GetOne: The request contains an incorrect parameter or no record exists"
+		c.Data["message"] = "Error service GetOne: The request contains an incorrect parameter or no record exists"
 		c.Abort("404")
 	} else {
 		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": v}
@@ -135,7 +136,7 @@ func (c *ResolucionController) GetAll() {
 	l, err := models.GetAllResolucion(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		logs.Error(err)
-		c.Data["mesaage"] = "Error service GetAll: The request contains an incorrect parameter or no record exists"
+		c.Data["message"] = "Error service GetAll: The request contains an incorrect parameter or no record exists"
 		c.Abort("404")
 	} else {
 		if l == nil {
@@ -159,16 +160,18 @@ func (c *ResolucionController) Put() {
 	id, _ := strconv.Atoi(idStr)
 	v := models.Resolucion{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+		v.FechaCreacion = time_bogota.TiempoCorreccionFormato(v.FechaCreacion)
+		v.FechaModificacion = time_bogota.TiempoBogotaFormato()
 		if err := models.UpdateResolucionById(&v); err == nil {
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Update successful", "Data": v}
 		} else {
 			logs.Error(err)
-			c.Data["mesaage"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
+			c.Data["message"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
 			c.Abort("400")
 		}
 	} else {
 		logs.Error(err)
-		c.Data["mesaage"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
+		c.Data["message"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
 		c.Abort("400")
 	}
 	c.ServeJSON()
@@ -189,7 +192,7 @@ func (c *ResolucionController) Delete() {
 		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Delete successful", "Data": d}
 	} else {
 		logs.Error(err)
-		c.Data["mesaage"] = "Error service Delete: Request contains incorrect parameter"
+		c.Data["message"] = "Error service Delete: Request contains incorrect parameter"
 		c.Abort("404")
 	}
 	c.ServeJSON()
@@ -225,19 +228,26 @@ func (c *ResolucionController) Delete() {
 // @Param	body		body 	models.Resolucion	true		"body for Resolucion content"
 // @Success 200 {object} models.Resolucion
 // @Failure 403 :id is not int
+// @Failure 400 the request contains incorrect syntax
 // @router /RestaurarResolucion/:id [put]
 func (c *ResolucionController) RestaurarResolucion() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
 	v := models.Resolucion{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+		v.FechaCreacion = time_bogota.TiempoCorreccionFormato(v.FechaCreacion)
+		v.FechaModificacion = time_bogota.TiempoBogotaFormato()
 		if err := models.RestaurarResolucion(&v); err == nil {
-			c.Data["json"] = "OK"
+			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": v}
 		} else {
-			c.Data["json"] = err.Error()
+			logs.Error(err)
+			c.Data["message"] = err.Error()
+			c.Abort("400")
 		}
 	} else {
-		c.Data["json"] = err.Error()
+		logs.Error(err)
+		c.Data["message"] = err.Error()
+		c.Abort("403")
 	}
 	c.ServeJSON()
 }
@@ -245,20 +255,26 @@ func (c *ResolucionController) RestaurarResolucion() {
 // Post ...
 // @Title Post
 // @Description create Resolucion
+// @Param	body		body 	models.Resolucion	true		"body for Resolucion content"
 // @Success 201 {int} models.Resolucion
 // @Failure 403 body is empty
+// @Failure 400 the request contains incorrect syntax
 // @router /GenerarResolucion [post]
 func (c *ResolucionController) GenerarResolucion() {
 	var v models.Resolucion
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if _, err := models.GenerarResolucion(&v); err == nil {
 			c.Ctx.Output.SetStatus(201)
-			c.Data["json"] = v
+			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": v}
 		} else {
-			c.Data["json"] = err.Error()
+			logs.Error(err)
+			c.Data["message"] = err.Error()
+			c.Abort("400")
 		}
 	} else {
-		c.Data["json"] = err.Error()
+		logs.Error(err)
+		c.Data["message"] = err.Error()
+		c.Abort("403")
 	}
 	c.ServeJSON()
 }

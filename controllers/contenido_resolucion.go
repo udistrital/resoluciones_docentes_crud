@@ -6,7 +6,7 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
-	"github.com/udistrital/resoluciones_crud/models"
+	"github.com/udistrital/resoluciones_docentes_crud/models"
 )
 
 type ResolucionCompletaController struct {
@@ -28,7 +28,7 @@ func (c *ResolucionCompletaController) URLMapping() {
 // @Failure 404 Not found
 // @Failure 500 Internal Server Error
 // @Failure 502 Bad Gateway
-// @router /resolucion-template/:dedicacion/:nivel [get]
+// @router /resolucion_template/:dedicacion/:nivel [get]
 func (c *ResolucionCompletaController) ResolucionTemplate() {
 	defer ErrorControl(c.Controller, "ResolucionVinculacionController")
 
@@ -85,10 +85,6 @@ func (c *ResolucionCompletaController) Put() {
 
 	v := models.ResolucionCompleta{Id: idResolucion}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		/*fmt.Println("Contenido resolucion")
-		fmt.Println(&v)
-		fmt.Println("OTRA PRUEBA")
-		fmt.Println(v)*/
 
 		if err := models.UpdateResolucionCompletaById(&v); err == nil {
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": ""}
@@ -108,7 +104,7 @@ func (c *ResolucionCompletaController) Put() {
 	if err := recover(); err != nil {
 		logs.Error(err)
 		localError := err.(map[string]interface{})
-		c.Data["mesaage"] = (beego.AppConfig.String("appname") + "/" + "ResolucionCompletaController" + "/" + (localError["funcion"]).(string))
+		c.Data["message"] = (beego.AppConfig.String("appname") + "/" + "ResolucionCompletaController" + "/" + (localError["funcion"]).(string))
 		c.Data["data"] = (localError["err"])
 		if status, ok := localError["status"]; ok {
 			c.Abort(status.(string))
