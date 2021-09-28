@@ -10,7 +10,7 @@ INSERT INTO resoluciones.tipo_resolucion(nombre_tipo_resolucion, descripcion, ac
     ('Vinculación', 'Resolución que permite vincular docentes', true),
     ('Cancelación', 'Resolución que se crea para anular una ya existente y que corta el vinculo de los docentes elegidos con la Universidad', true),
     ('Adición', 'Resolución que se crea para adicionar horas a los docentes elegidos de la resolución que reemplaza', true),
-    ('Vinculación', 'Resolución que se crea para quitar horas a los docentes elegidos de la resolución a la que reemplaza ', true);
+    ('Reducción', 'Resolución que se crea para quitar horas a los docentes elegidos de la resolución a la que reemplaza ', true);
 
 INSERT INTO resoluciones.dedicacion(nombre_dedicacion, descripcion, activo) VALUES
     ('HCH', 'HORA CATEDRA HONORARIOS', true),
