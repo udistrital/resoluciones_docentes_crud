@@ -6,6 +6,7 @@ import (
 
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
+	"github.com/udistrital/utils_oas/time_bogota"
 )
 
 type Paragrafo struct {
@@ -22,14 +23,15 @@ type Articulo struct {
 }
 
 type ResolucionCompleta struct {
-	Vinculacion   ResolucionVinculacionDocente
-	Consideracion string
-	Preambulo     string
-	Vigencia      int
-	Numero        string
-	Id            int
-	Articulos     []Articulo
-	Titulo        string
+	Vinculacion             ResolucionVinculacionDocente
+	Consideracion           string
+	Preambulo               string
+	Vigencia                int
+	Numero                  string
+	Id                      int
+	Articulos               []Articulo
+	Titulo                  string
+	CuadroResponsabilidades string
 }
 
 func GetOneResolucionCompleta(idResolucion string) (resolucion ResolucionCompleta, outputError map[string]interface{}) {
@@ -37,7 +39,6 @@ func GetOneResolucionCompleta(idResolucion string) (resolucion ResolucionComplet
 		if err := recover(); err != nil {
 			outputError = map[string]interface{}{"funcion": "GetOneResolucionCompleta", "err": err, "status": "500"}
 			panic(outputError)
-			
 		}
 	}()
 
@@ -51,7 +52,7 @@ func GetOneResolucionCompleta(idResolucion string) (resolucion ResolucionComplet
 
 	}
 
-	resolucionCompleta := ResolucionCompleta{Id: temp[0].Id, Consideracion: temp[0].ConsideracionResolucion, Preambulo: temp[0].PreambuloResolucion, Vigencia: temp[0].Vigencia, Numero: temp[0].NumeroResolucion, Titulo: temp[0].Titulo}
+	resolucionCompleta := ResolucionCompleta{Id: temp[0].Id, Consideracion: temp[0].ConsideracionResolucion, Preambulo: temp[0].PreambuloResolucion, Vigencia: temp[0].Vigencia, Numero: temp[0].NumeroResolucion, Titulo: temp[0].Titulo, CuadroResponsabilidades: temp[0].CuadroResponsabilidades}
 	fmt.Println("--------- ")
 	var arts []ComponenteResolucion
 	if _, err := o.QueryTable("componente_resolucion").Filter("resolucion_id", idRes).Filter("tipo_componente", "Articulo").OrderBy("numero").All(&arts); err != nil {
@@ -82,8 +83,8 @@ func GetOneResolucionCompleta(idResolucion string) (resolucion ResolucionComplet
 		articulos = append(articulos, articulo)
 	}
 
-	var resolucion_vinculacion_docente ResolucionVinculacionDocente 
-	if _, err := o.QueryTable("resolucion_vinculacion_docente").Filter("id", idRes).All(&resolucion_vinculacion_docente); err != nil{
+	var resolucion_vinculacion_docente ResolucionVinculacionDocente
+	if _, err := o.QueryTable("resolucion_vinculacion_docente").Filter("id", idRes).All(&resolucion_vinculacion_docente); err != nil {
 		outputError = map[string]interface{}{"funcion": "/GetOneResolucionCompleta1", "err": err.Error(), "status": "500"}
 		return resolucion, outputError
 	}
@@ -101,10 +102,12 @@ func UpdateResolucionCompletaById(m *ResolucionCompleta) (outputError map[string
 	}()
 	o := orm.NewOrm()
 	fmt.Println("ESTO ES M: ", m)
-	v := Resolucion{Id: 333}
+	v := Resolucion{Id: m.Id}
 	fmt.Println("Esto es v ", v)
 	if err := o.Read(&v); err == nil {
 		v.NumeroResolucion = m.Numero
+		v.FechaCreacion = time_bogota.TiempoCorreccionFormato(v.FechaCreacion)
+		v.FechaModificacion = time_bogota.TiempoBogotaFormato()
 		//v.Titulo = m.Titulo
 
 		if _, err := o.Update(&v); err != nil {
@@ -124,7 +127,14 @@ func UpdateResolucionCompletaById(m *ResolucionCompleta) (outputError map[string
 	a := ResolucionVinculacionDocente{Id: r.Id}
 	fmt.Println("PRUEBA DE QUE ES A ", a)
 	if err := o.Read(&a); err == nil {
-		if _, err = o.Update(&r); err != nil {
+		if len(a.FechaCreacion) > 0 {
+			a.FechaCreacion = time_bogota.TiempoCorreccionFormato(a.FechaCreacion)
+		} else {
+			a.FechaCreacion = time_bogota.TiempoBogotaFormato()
+		}
+		a.FechaModificacion = time_bogota.TiempoBogotaFormato()
+
+		if _, err = o.Update(&a); err != nil {
 			logs.Error(err)
 			outputError = map[string]interface{}{"funcion": "/UpdateResolucionCompletaById3", "err": err.Error(), "status": "500"}
 			return
@@ -138,6 +148,9 @@ func UpdateResolucionCompletaById(m *ResolucionCompleta) (outputError map[string
 		v.ConsideracionResolucion = m.Consideracion
 		v.PreambuloResolucion = m.Preambulo
 		v.NumeroResolucion = m.Numero
+		v.CuadroResponsabilidades = m.CuadroResponsabilidades
+		v.FechaCreacion = time_bogota.TiempoCorreccionFormato(v.FechaCreacion)
+		v.FechaModificacion = time_bogota.TiempoBogotaFormato()
 		if err := UpdateResolucionById(&v); err != nil {
 			logs.Error(err)
 			outputError = map[string]interface{}{"funcion": "/UpdateResolucionCompletaById", "err": err.Error(), "status": "500"}
@@ -170,10 +183,14 @@ func UpdateResolucionCompletaById(m *ResolucionCompleta) (outputError map[string
 
 		for indexArticulo, articulo := range m.Articulos {
 			componenteArticulo := ComponenteResolucion{ResolucionId: &Resolucion{Id: m.Id}, Texto: articulo.Texto, Numero: indexArticulo + 1, TipoComponente: "Articulo"}
+			componenteArticulo.FechaCreacion = time_bogota.TiempoBogotaFormato()
+			componenteArticulo.FechaModificacion = time_bogota.TiempoBogotaFormato()
 			if _, err := AddComponenteResolucion(&componenteArticulo); err == nil {
 				if articulo.Paragrafos != nil {
 					for indexParagrafo, paragrafo := range articulo.Paragrafos {
 						componenteParagrafo := ComponenteResolucion{ResolucionId: &Resolucion{Id: m.Id}, Texto: paragrafo.Texto, Numero: indexParagrafo + 1, TipoComponente: "Paragrafo", ComponenteResolucionPadre: &ComponenteResolucion{Id: componenteArticulo.Id}}
+						componenteParagrafo.FechaCreacion = time_bogota.TiempoBogotaFormato()
+						componenteParagrafo.FechaModificacion = time_bogota.TiempoBogotaFormato()
 						if _, err := AddComponenteResolucion(&componenteParagrafo); err != nil {
 							logs.Error(err)
 							outputError = map[string]interface{}{"funcion": "/UpdateResolucionCompletaById2", "err": err.Error(), "status": "500"}

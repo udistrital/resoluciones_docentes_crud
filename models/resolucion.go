@@ -27,6 +27,7 @@ type Resolucion struct {
 	DependenciaFirmaId      int             `orm:"column(dependencia_firma_id);null"`
 	VigenciaCarga           int             `orm:"column(vigencia_carga);null"`
 	PeriodoCarga            int             `orm:"column(periodo_carga);null"`
+	CuadroResponsabilidades string          `orm:"column(cuadro_responsabilidades);type(json);null"`
 	Activo                  bool            `orm:"column(activo);null"`
 	FechaCreacion           string          `orm:"column(fecha_creacion);type(timestamp without time zone)"`
 	FechaModificacion       string          `orm:"column(fecha_modificacion);type(timestamp without time zone);null"`

@@ -2386,6 +2386,9 @@
                 "ConsideracionResolucion": {
                     "type": "string"
                 },
+                "CuadroResponsabilidades": {
+                    "type": "string"
+                },
                 "DependenciaFirmaId": {
                     "type": "integer",
                     "format": "int64"
@@ -2453,6 +2456,9 @@
                     }
                 },
                 "Consideracion": {
+                    "type": "string"
+                },
+                "CuadroResponsabilidades": {
                     "type": "string"
                 },
                 "Id": {
