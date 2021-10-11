@@ -212,7 +212,7 @@ func (c *VinculacionDocenteController) GetTotalContratosXResolucion() {
 	if err != nil {
 		logs.Error(err)
 		c.Data["message"] = "Error service Get: The request contains an incorrect parameter or no record exists"
-		c.Abort("404")
+		c.Abort("500")
 	} else {
 		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": v}
 	}
@@ -257,7 +257,7 @@ func (c *VinculacionDocenteController) GetVinculacionesAgrupadas() {
 	if err != nil {
 		logs.Error(err)
 		c.Data["message"] = "Error service Get: The request contains an incorrect parameter or no record exists"
-		c.Abort("404")
+		c.Abort("500")
 	} else {
 		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": v}
 	}
@@ -281,7 +281,7 @@ func (c *VinculacionDocenteController) GetValoresTotalesPorDisponibilidad() {
 	if err != nil {
 		logs.Error(err)
 		c.Data["message"] = "Error service Get: The request contains an incorrect parameter or no record exists"
-		c.Abort("404")
+		c.Abort("500")
 	} else {
 		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": v}
 	}
