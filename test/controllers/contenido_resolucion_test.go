@@ -1,27 +1,22 @@
 package controllers
 
 import (
-	"database/sql"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
 
-	"github.com/go-testfixtures/testfixtures"
 	_ "github.com/udistrital/resoluciones_docentes_crud/routers"
 
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
-var o orm.Ormer
+/* var o orm.Ormer
 var (
-	db       *sql.DB
-	fixtures *testfixtures.Loader
-)
+	db *sql.DB
+) */
 
 /*
 type Paragrafo struct {
@@ -48,23 +43,23 @@ type ResolucionCompleta struct {
 	Titulo        string
 }
 */
-func init() {
-	pgUser := os.Getenv("POSTGRES_USER")
-	pgPass := os.Getenv("POSTGRES_PASSWORD")
-	pgUrls := os.Getenv("POSTGRES_HOST")
-	pgDb := os.Getenv("POSTGRES_DB")
-	pgPort := os.Getenv("POSTGRES_DB_PORT")
-	pgSchema := os.Getenv("POSTGRES_SCHEMA")
+/* func init() {
+	pgUser := os.Getenv("RESOLUCIONES_CRUD_PGUSER")
+	pgPass := os.Getenv("RESOLUCIONES_CRUD_PGPASS")
+	pgUrls := os.Getenv("RESOLUCIONES_CRUD_PGHOST")
+	pgDb := os.Getenv("RESOLUCIONES_CRUD_PGDB")
+	pgPort := os.Getenv("RESOLUCIONES_CRUD_PGPORT")
+	pgSchema := os.Getenv("RESOLUCIONES_CRUD_PGSCHEMA")
 	orm.RegisterDataBase("default", "postgres", "postgres://"+pgUser+":"+pgPass+"@"+pgUrls+":"+pgPort+"/"+pgDb+"?sslmode=disable&search_path="+pgSchema+"")
 
-}
+} */
 
 func TestResolucionTemplate(t *testing.T) {
 	//t.Log(w.Body.String())
 	//t.Log(response)
 	Convey("Test: /Resolucion_template - Contenido resolucion  Endpoint\n", t, func() {
 		// peticion correcta
-		r, err := http.NewRequest("GET", "/v1/contenido_resolucion/resolucion-template/HPC/PREGRADO", nil)
+		r, err := http.NewRequest("GET", "/v1/contenido_resolucion/resolucion_template/HPC/PREGRADO", nil)
 		if err != nil {
 			t.Fatal("error", err)
 		}
@@ -115,7 +110,7 @@ func TestGetOne(t *testing.T) {
 		// petición con datos incorrectos
 
 		Convey("Status Code Should Be 500", func() {
-			r, err = http.NewRequest("GET", "/v1/contenido_resolucion/33a", nil)
+			r, err = http.NewRequest("GET", "/v1/contenido_resolucion/36", nil)
 			w = httptest.NewRecorder()
 			beego.BeeApp.Handlers.ServeHTTP(w, r)
 			So(w.Code, ShouldEqual, 500)

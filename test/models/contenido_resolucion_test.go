@@ -2,10 +2,8 @@ package models
 
 import (
 	"encoding/json"
-	"os"
 	"testing"
 
-	"github.com/astaxie/beego/orm"
 	"github.com/udistrital/resoluciones_docentes_crud/models"
 	_ "github.com/udistrital/resoluciones_docentes_crud/routers"
 
@@ -14,16 +12,15 @@ import (
 	. "github.com/smartystreets/goconvey/convey"
 )
 
-func init() {
-	pgUser := os.Getenv("POSTGRES_USER")
-	pgPass := os.Getenv("POSTGRES_PASSWORD")
-	pgUrls := os.Getenv("POSTGRES_HOST")
-	pgDb := os.Getenv("POSTGRES_DB")
-	pgPort := os.Getenv("POSTGRES_DB_PORT")
-	pgSchema := os.Getenv("POSTGRES_SCHEMA")
+/* func init() {
+	pgUser := os.Getenv("RESOLUCIONES_CRUD_PGUSER")
+	pgPass := os.Getenv("RESOLUCIONES_CRUD_PGPASS")
+	pgUrls := os.Getenv("RESOLUCIONES_CRUD_PGHOST")
+	pgDb := os.Getenv("RESOLUCIONES_CRUD_PGDB")
+	pgPort := os.Getenv("RESOLUCIONES_CRUD_PGPORT")
+	pgSchema := os.Getenv("RESOLUCIONES_CRUD_PGSCHEMA")
 	orm.RegisterDataBase("default", "postgres", "postgres://"+pgUser+":"+pgPass+"@"+pgUrls+":"+pgPort+"/"+pgDb+"?sslmode=disable&search_path="+pgSchema+"")
-
-}
+} */
 
 //POSTGRES_SCHEMA=resoluciones POSTGRES_HOST=localhost POSTGRES_DB_PORT=5432 POSTGRES_DB=resoluciones_db POSTGRES_USER=resoluciones POSTGRES_PASSWORD=resoluciones go test -v ./...
 //POSTGRES_SCHEMA=resoluciones POSTGRES_HOST=pgtst.udistritaloas.edu.co POSTGRES_DB_PORT=5432 POSTGRES_DB=udistrital_administrativa POSTGRES_USER=desarrollooas POSTGRES_PASSWORD=W7Sz1lbWFwfE798b go test -v ./...
