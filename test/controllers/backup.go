@@ -10,6 +10,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/udistrital/resoluciones_docentes_crud/models"
 	_ "github.com/udistrital/resoluciones_docentes_crud/routers"
 
 	"github.com/DATA-DOG/go-sqlmock"
@@ -100,7 +101,7 @@ func TestDBWithMockedSqlDriver(t *testing.T) {
 		// setup mock
 		columnasTabla := []string{}
 
-		v := reflect.TypeOf(ResolucionVinculacion{})
+		v := reflect.TypeOf(models.ResolucionVinculacion{})
 		for i := 0; i < v.NumField(); i++ {
 			field := v.Field(i)
 			tag := field.Tag.Get("orm")
@@ -130,7 +131,7 @@ func TestDBWithMockedSqlDriver(t *testing.T) {
 		*/
 		//***************************************
 		// call function to test
-		r, err := http.NewRequest("GET", "/v1/resolucion-vinculacion/expedidas_vigencia_periodo?vigencia=2019", nil)
+		r, err := http.NewRequest("GET", "/v1/resolucion_vinculacion/expedidas_vigencia_periodo?vigencia=2019", nil)
 		if err != nil {
 			t.Fatal("error", err)
 		}

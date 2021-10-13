@@ -15,14 +15,13 @@ import (
 )
 
 func init() {
-	pgUser := os.Getenv("POSTGRES_USER")
-	pgPass := os.Getenv("POSTGRES_PASSWORD")
-	pgUrls := os.Getenv("POSTGRES_HOST")
-	pgDb := os.Getenv("POSTGRES_DB")
-	pgPort := os.Getenv("POSTGRES_DB_PORT")
-	pgSchema := os.Getenv("POSTGRES_SCHEMA")
+	pgUser := os.Getenv("RESOLUCIONES_CRUD_PGUSER")
+	pgPass := os.Getenv("RESOLUCIONES_CRUD_PGPASS")
+	pgUrls := os.Getenv("RESOLUCIONES_CRUD_PGHOST")
+	pgDb := os.Getenv("RESOLUCIONES_CRUD_PGDB")
+	pgPort := os.Getenv("RESOLUCIONES_CRUD_PGPORT")
+	pgSchema := os.Getenv("RESOLUCIONES_CRUD_PGSCHEMA")
 	orm.RegisterDataBase("default", "postgres", "postgres://"+pgUser+":"+pgPass+"@"+pgUrls+":"+pgPort+"/"+pgDb+"?sslmode=disable&search_path="+pgSchema+"")
-
 }
 
 //POSTGRES_SCHEMA=resoluciones POSTGRES_HOST=localhost POSTGRES_DB_PORT=5432 POSTGRES_DB=resoluciones_db POSTGRES_USER=resoluciones POSTGRES_PASSWORD=resoluciones go test -v ./...

@@ -3,26 +3,17 @@ package controllers
 import (
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
-	"time"
 
 	_ "github.com/udistrital/resoluciones_docentes_crud/routers"
 
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
-/*var o orm.Ormer
-var (
-	db       *sql.DB
-	fixtures *testfixtures.Loader
-)*/
-
-type ResolucionVinculacion struct {
+/* type ResolucionVinculacion struct {
 	Id                 int       `orm:"column(id );pk;auto"`
 	Estado             string    `orm:"column(estado )"`
 	Numero             string    `orm:"column(numero )"`
@@ -37,24 +28,24 @@ type ResolucionVinculacion struct {
 	IdDependenciaFirma int       `orm:"column(dependencia_firma )"`
 	PeriodoCarga       int       `orm:"column(periodo_carga )"`
 	VigenciaCarga      int       `orm:"column(vigencia_carga )"`
-}
+} */
 
-func init() {
-	pgUser := os.Getenv("POSTGRES_USER")
-	pgPass := os.Getenv("POSTGRES_PASSWORD")
-	pgUrls := os.Getenv("POSTGRES_HOST")
-	pgDb := os.Getenv("POSTGRES_DB")
-	pgPort := os.Getenv("POSTGRES_DB_PORT")
-	pgSchema := os.Getenv("POSTGRES_SCHEMA")
+/* func init() {
+	pgUser := os.Getenv("RESOLUCIONES_CRUD_PGUSER")
+	pgPass := os.Getenv("RESOLUCIONES_CRUD_PGPASS")
+	pgUrls := os.Getenv("RESOLUCIONES_CRUD_PGHOST")
+	pgDb := os.Getenv("RESOLUCIONES_CRUD_PGDB")
+	pgPort := os.Getenv("RESOLUCIONES_CRUD_PGPORT")
+	pgSchema := os.Getenv("RESOLUCIONES_CRUD_PGSCHEMA")
 	orm.RegisterDataBase("default", "postgres", "postgres://"+pgUser+":"+pgPass+"@"+pgUrls+":"+pgPort+"/"+pgDb+"?sslmode=disable&search_path="+pgSchema+"")
 
 }
-
+*/
 func TestGetAllGetAll(t *testing.T) {
 
 	Convey("Test: / - Resolucion vinculación  Endpoint\n", t, func() {
 		// peticion correcta
-		r, err := http.NewRequest("GET", "/v1/resolucion-vinculacion/", nil)
+		r, err := http.NewRequest("GET", "/v1/resolucion_vinculacion/", nil)
 		w := httptest.NewRecorder()
 
 		beego.BeeApp.Handlers.ServeHTTP(w, r)
@@ -82,7 +73,7 @@ func TestGetAllGetAllAprobada(t *testing.T) {
 
 	Convey("Test: /Aprobada - Resolucion vinculación  Endpoint\n", t, func() {
 		// peticion correcta
-		r, err := http.NewRequest("GET", "/v1/resolucion-vinculacion/Aprobada", nil)
+		r, err := http.NewRequest("GET", "/v1/resolucion_vinculacion/Aprobada", nil)
 		w := httptest.NewRecorder()
 
 		beego.BeeApp.Handlers.ServeHTTP(w, r)
@@ -112,7 +103,7 @@ func TestGetAllExpedidasVigenciaPeriodo(t *testing.T) {
 	//t.Log(response)
 	Convey("Test: /expedidas_vigencia_periodo - Resolucion vinculacion  Endpoint\n", t, func() {
 		// peticion correcta
-		r, err := http.NewRequest("GET", "/v1/resolucion-vinculacion/expedidas_vigencia_periodo?vigencia=2019", nil)
+		r, err := http.NewRequest("GET", "/v1/resolucion_vinculacion/expedidas_vigencia_periodo?vigencia=2019", nil)
 		if err != nil {
 			t.Fatal("error", err)
 		}
@@ -135,7 +126,7 @@ func TestGetAllExpedidasVigenciaPeriodo(t *testing.T) {
 		// petición con datos incorrectos
 
 		Convey("Status Code Should Be 500", func() {
-			r, err = http.NewRequest("GET", "/v1/resolucion-vinculacion/expedidas_vigencia_periodo?vigencia=201a", nil)
+			r, err = http.NewRequest("GET", "/v1/resolucion_vinculacion/expedidas_vigencia_periodo?vigencia=201a", nil)
 			w = httptest.NewRecorder()
 			beego.BeeApp.Handlers.ServeHTTP(w, r)
 			So(w.Code, ShouldEqual, 500)
@@ -151,7 +142,7 @@ func TestGetAllExpedidasVigenciaPeriodoVinculacion(t *testing.T) {
 
 	Convey("Test: /expedidas_vigencia_periodo_vinculacion - Resolucion vinculación  Endpoint\n", t, func() {
 		// peticion correcta
-		r, err := http.NewRequest("GET", "/v1/resolucion-vinculacion/expedidas_vigencia_periodo_vinculacion?vigencia=2019", nil)
+		r, err := http.NewRequest("GET", "/v1/resolucion_vinculacion/expedidas_vigencia_periodo_vinculacion?vigencia=2019", nil)
 		w := httptest.NewRecorder()
 
 		beego.BeeApp.Handlers.ServeHTTP(w, r)
@@ -169,7 +160,7 @@ func TestGetAllExpedidasVigenciaPeriodoVinculacion(t *testing.T) {
 		// petición con datos incorrectos
 
 		Convey("Status Code Should Be 500", func() {
-			r, err = http.NewRequest("GET", "/v1/resolucion-vinculacion/expedidas_vigencia_periodo_vinculacion?vigencia=201a", nil)
+			r, err = http.NewRequest("GET", "/v1/resolucion_vinculacion/expedidas_vigencia_periodo_vinculacion?vigencia=201a", nil)
 			w = httptest.NewRecorder()
 			beego.BeeApp.Handlers.ServeHTTP(w, r)
 			So(w.Code, ShouldEqual, 500)
