@@ -18,7 +18,7 @@ func init() {
 	m := &CuadroResponsabilidad_20210924_145046{}
 	m.Created = "20210924_145046"
 
-	migration.Register("20210924_145046_CuadroResponsabilidad", m)
+	migration.Register("CuadroResponsabilidad_20210924_145046", m)
 }
 
 // Run the migrations
