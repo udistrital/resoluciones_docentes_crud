@@ -47,12 +47,12 @@ func (c *VinculacionDocenteController) Post() {
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "201", "Message": "Registration successful", "Data": v}
 		} else {
 			logs.Error(err)
-			c.Data["message"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
+			c.Data["mesaage"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
 			c.Abort("400")
 		}
 	} else {
 		logs.Error(err)
-		c.Data["message"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
+		c.Data["mesaage"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
 		c.Abort("400")
 	}
 	c.ServeJSON()
@@ -71,7 +71,7 @@ func (c *VinculacionDocenteController) GetOne() {
 	v, err := models.GetVinculacionDocenteById(id)
 	if err != nil {
 		logs.Error(err)
-		c.Data["message"] = "Error service GetOne: The request contains an incorrect parameter or no record exists"
+		c.Data["mesaage"] = "Error service GetOne: The request contains an incorrect parameter or no record exists"
 		c.Abort("404")
 	} else {
 		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": v}
@@ -88,7 +88,7 @@ func (c *VinculacionDocenteController) GetOne() {
 // @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
 // @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
-// @Success 200 {object} models.VinculacionDocente
+// @Success 200 {object} []models.VinculacionDocente
 // @Failure 404 not found resource
 // @router / [get]
 func (c *VinculacionDocenteController) GetAll() {
@@ -136,11 +136,11 @@ func (c *VinculacionDocenteController) GetAll() {
 	l, err := models.GetAllVinculacionDocente(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		logs.Error(err)
-		c.Data["message"] = "Error service GetAll: The request contains an incorrect parameter or no record exists"
+		c.Data["mesaage"] = "Error service GetAll: The request contains an incorrect parameter or no record exists"
 		c.Abort("404")
 	} else {
 		if l == nil {
-			l = append(l, map[string]interface{}{})
+			l = []interface{}{}
 		}
 		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": l}
 	}
@@ -166,12 +166,12 @@ func (c *VinculacionDocenteController) Put() {
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Update successful", "Data": v}
 		} else {
 			logs.Error(err)
-			c.Data["message"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
+			c.Data["mesaage"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
 			c.Abort("400")
 		}
 	} else {
 		logs.Error(err)
-		c.Data["message"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
+		c.Data["mesaage"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
 		c.Abort("400")
 	}
 	c.ServeJSON()
@@ -192,7 +192,7 @@ func (c *VinculacionDocenteController) Delete() {
 		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Delete successful", "Data": d}
 	} else {
 		logs.Error(err)
-		c.Data["message"] = "Error service Delete: Request contains incorrect parameter"
+		c.Data["mesaage"] = "Error service Delete: Request contains incorrect parameter"
 		c.Abort("404")
 	}
 	c.ServeJSON()
@@ -201,7 +201,7 @@ func (c *VinculacionDocenteController) Delete() {
 // GetTotalContratosXResolucion ...
 // @Title GetTotalContratosXResolucion
 // @Description Retorna el valor total de la contratación para la resolución
-// @Param id_resolucion query string false "nomina a listar"
+// @Param id_resolucion query string true "nomina a listar"
 // @Success 201 {object} int
 // @Failure 403 body is empty
 // @router /get_total_contratos_x_resolucion/:id_resolucion/:dedicacion [get]
@@ -211,7 +211,7 @@ func (c *VinculacionDocenteController) GetTotalContratosXResolucion() {
 	v, err := models.GetTotalContratosXResolucion(idStr, dedicacion)
 	if err != nil {
 		logs.Error(err)
-		c.Data["message"] = "Error service Get: The request contains an incorrect parameter or no record exists"
+		c.Data["mesaage"] = "Error service Get: The request contains an incorrect parameter or no record exists"
 		c.Abort("500")
 	} else {
 		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": v}
@@ -222,6 +222,7 @@ func (c *VinculacionDocenteController) GetTotalContratosXResolucion() {
 // Post ...
 // @Title Post
 // @Description create VinculacionDocente
+// @Param	body	body 	models.VinculacionDocente	true	"body for VinculacionDocente content"
 // @Success 201 {int}
 // @Failure 403 body is empty
 // @router /InsertarVinculaciones [post]
@@ -233,12 +234,12 @@ func (c *VinculacionDocenteController) InsertarVinculaciones() {
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": id}
 		} else {
 			logs.Error(err)
-			c.Data["message"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
+			c.Data["mesaage"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
 			c.Abort("400")
 		}
 	} else {
 		logs.Error(err)
-		c.Data["message"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
+		c.Data["mesaage"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
 		c.Abort("400")
 	}
 	c.ServeJSON()
@@ -247,8 +248,8 @@ func (c *VinculacionDocenteController) InsertarVinculaciones() {
 // GetVinculacionesAgrupadas ...
 // @Title GetVinculacionesAgrupadas
 // @Description get vinculaciones agrupadas por docente
-// @Param	id_resolucion		path 	string	true
-// @Success 200 {object} models.VinculacionDocente
+// @Param	id_resolucion	path	string		true	"Id de la resolución a consultar"
+// @Success 200 {object} []models.VinculacionDocente
 // @Failure 403 :id is empty
 // @router /get_vinculaciones_agrupadas/:id_resolucion [get]
 func (c *VinculacionDocenteController) GetVinculacionesAgrupadas() {
@@ -256,7 +257,7 @@ func (c *VinculacionDocenteController) GetVinculacionesAgrupadas() {
 	v, err := models.GetVinculacionesAgrupadas(idStr)
 	if err != nil {
 		logs.Error(err)
-		c.Data["message"] = "Error service Get: The request contains an incorrect parameter or no record exists"
+		c.Data["mesaage"] = "Error service Get: The request contains an incorrect parameter or no record exists"
 		c.Abort("500")
 	} else {
 		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": v}
@@ -267,9 +268,9 @@ func (c *VinculacionDocenteController) GetVinculacionesAgrupadas() {
 // GetValoresTotalesPorDisponibilidad ...
 // @Title GetValoresTotalesPorDisponibilidad
 // @Description se obtiene el valor total que ha sido apartado para cierta disponibilidad
-// @Param	anio	    path 	string	true
-// @Param	periodo		path 	string	true
-// @Param	id_disponibilidad	path 	string	true
+// @Param	anio	    path 	string	true	"Vigencia"
+// @Param	periodo		path 	string	true	"Periodo dentro de la vigencia"
+// @Param	id_disponibilidad	path 	string	true	"Numero de disponibilidad presupuestal"
 // @Success 200 {int}
 // @Failure 403
 // @router /get_valores_totales_x_disponibilidad/:anio/:periodo/:id_disponibilidad [get]
@@ -280,7 +281,7 @@ func (c *VinculacionDocenteController) GetValoresTotalesPorDisponibilidad() {
 	v, err := models.GetValoresTotalesPorDisponibilidad(anio, periodo, id_disponibilidad)
 	if err != nil {
 		logs.Error(err)
-		c.Data["message"] = "Error service Get: The request contains an incorrect parameter or no record exists"
+		c.Data["mesaage"] = "Error service Get: The request contains an incorrect parameter or no record exists"
 		c.Abort("500")
 	} else {
 		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": v}

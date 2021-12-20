@@ -3,10 +3,10 @@
     "info": {
         "title": "Resoluciones CRUD API",
         "description": "Crud del aplicativo resoluciones, se usa para generar las resoluciones que afectan a los docentes de vinculacion especial, las cuales se usan para vincular, adicionar, reducir un contrato.",
-        "version": "1.0.0",
+        "version": "1.1.0",
         "termsOfService": "http://beego.me/",
         "contact": {
-            "email": "astaxie@gmail.com"
+            "email": "computo@udistrital.edu.com"
         },
         "license": {
             "name": "Apache 2.0",
@@ -64,7 +64,10 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.ComponenteResolucion"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ComponenteResolucion"
+                            }
                         }
                     },
                     "404": {
@@ -362,7 +365,10 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Dedicacion"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Dedicacion"
+                            }
                         }
                     },
                     "404": {
@@ -535,7 +541,10 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.EstadoResolucion"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.EstadoResolucion"
+                            }
                         }
                     },
                     "404": {
@@ -708,7 +717,10 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.ModificacionResolucion"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ModificacionResolucion"
+                            }
                         }
                     },
                     "404": {
@@ -881,7 +893,10 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.ModificacionVinculacion"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ModificacionVinculacion"
+                            }
                         }
                     },
                     "404": {
@@ -1054,7 +1069,10 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Resolucion"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Resolucion"
+                            }
                         }
                     },
                     "404": {
@@ -1299,7 +1317,10 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.ResolucionEstado"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ResolucionEstado"
+                            }
                         }
                     },
                     "404": {
@@ -1496,7 +1517,10 @@
                     "201": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.ResolucionVinculacionDocente"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ResolucionVinculacion"
+                            }
                         }
                     },
                     "403": {
@@ -1517,6 +1541,7 @@
                         "in": "query",
                         "name": "vigencia",
                         "description": "nomina a listar",
+                        "required": true,
                         "type": "string"
                     }
                 ],
@@ -1524,7 +1549,10 @@
                     "201": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Preliquidacion_x_contratos"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ResolucionVinculacion"
+                            }
                         }
                     },
                     "403": {
@@ -1552,7 +1580,10 @@
                     "201": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Preliquidacion_x_contratos"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ResolucionVinculacion"
+                            }
                         }
                     },
                     "403": {
@@ -1610,7 +1641,10 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.ResolucionVinculacionDocente"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ResolucionVinculacionDocente"
+                            }
                         }
                     },
                     "404": {
@@ -1783,7 +1817,10 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.TipoResolucion"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.TipoResolucion"
+                            }
                         }
                     },
                     "404": {
@@ -1956,7 +1993,10 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.VinculacionDocente"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.VinculacionDocente"
+                            }
                         }
                     },
                     "404": {
@@ -1998,6 +2038,17 @@
                 ],
                 "description": "create VinculacionDocente",
                 "operationId": "VinculacionDocenteController.Post",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for VinculacionDocente content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.VinculacionDocente"
+                        }
+                    }
+                ],
                 "responses": {
                     "201": {
                         "description": "{int}"
@@ -2020,6 +2071,7 @@
                         "in": "query",
                         "name": "id_resolucion",
                         "description": "nomina a listar",
+                        "required": true,
                         "type": "string"
                     }
                 ],
@@ -2048,19 +2100,22 @@
                     {
                         "in": "path",
                         "name": "anio",
-                        "description": "true",
+                        "description": "Vigencia",
+                        "required": true,
                         "type": "string"
                     },
                     {
                         "in": "path",
                         "name": "periodo",
-                        "description": "true",
+                        "description": "Periodo dentro de la vigencia",
+                        "required": true,
                         "type": "string"
                     },
                     {
                         "in": "path",
                         "name": "id_disponibilidad",
-                        "description": "true",
+                        "description": "Numero de disponibilidad presupuestal",
+                        "required": true,
                         "type": "string"
                     }
                 ],
@@ -2085,7 +2140,8 @@
                     {
                         "in": "path",
                         "name": "id_resolucion",
-                        "description": "true",
+                        "description": "Id de la resolución a consultar",
+                        "required": true,
                         "type": "string"
                     }
                 ],
@@ -2093,7 +2149,10 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.VinculacionDocente"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.VinculacionDocente"
+                            }
                         }
                     },
                     "403": {
@@ -2372,10 +2431,6 @@
                 }
             }
         },
-        "models.Preliquidacion_x_contratos": {
-            "title": "Preliquidacion_x_contratos",
-            "type": "object"
-        },
         "models.Resolucion": {
             "title": "Resolucion",
             "type": "object",
@@ -2508,6 +2563,63 @@
                 },
                 "Usuario": {
                     "type": "string"
+                }
+            }
+        },
+        "models.ResolucionVinculacion": {
+            "title": "ResolucionVinculacion",
+            "type": "object",
+            "properties": {
+                "Dedicacion": {
+                    "type": "string"
+                },
+                "Estado": {
+                    "type": "string"
+                },
+                "Facultad": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "FechaExpedicion": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "Id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "IdDependenciaFirma": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "NivelAcademico": {
+                    "type": "string"
+                },
+                "Numero": {
+                    "type": "string"
+                },
+                "NumeroSemanas": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Periodo": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "PeriodoCarga": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "TipoResolucion": {
+                    "type": "string"
+                },
+                "Vigencia": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "VigenciaCarga": {
+                    "type": "integer",
+                    "format": "int64"
                 }
             }
         },

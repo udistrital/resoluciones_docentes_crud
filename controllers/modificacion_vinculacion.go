@@ -44,12 +44,12 @@ func (c *ModificacionVinculacionController) Post() {
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "201", "Message": "Registration successful", "Data": v}
 		} else {
 			logs.Error(err)
-			c.Data["message"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
+			c.Data["mesaage"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
 			c.Abort("400")
 		}
 	} else {
 		logs.Error(err)
-		c.Data["message"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
+		c.Data["mesaage"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
 		c.Abort("400")
 	}
 	c.ServeJSON()
@@ -68,7 +68,7 @@ func (c *ModificacionVinculacionController) GetOne() {
 	v, err := models.GetModificacionVinculacionById(id)
 	if err != nil {
 		logs.Error(err)
-		c.Data["message"] = "Error service GetOne: The request contains an incorrect parameter or no record exists"
+		c.Data["mesaage"] = "Error service GetOne: The request contains an incorrect parameter or no record exists"
 		c.Abort("404")
 	} else {
 		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": v}
@@ -85,7 +85,7 @@ func (c *ModificacionVinculacionController) GetOne() {
 // @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
 // @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
-// @Success 200 {object} models.ModificacionVinculacion
+// @Success 200 {object} []models.ModificacionVinculacion
 // @Failure 404 not found resource
 // @router / [get]
 func (c *ModificacionVinculacionController) GetAll() {
@@ -133,11 +133,11 @@ func (c *ModificacionVinculacionController) GetAll() {
 	l, err := models.GetAllModificacionVinculacion(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		logs.Error(err)
-		c.Data["message"] = "Error service GetAll: The request contains an incorrect parameter or no record exists"
+		c.Data["mesaage"] = "Error service GetAll: The request contains an incorrect parameter or no record exists"
 		c.Abort("404")
 	} else {
 		if l == nil {
-			l = append(l, map[string]interface{}{})
+			l = []interface{}{}
 		}
 		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": l}
 	}
@@ -163,12 +163,12 @@ func (c *ModificacionVinculacionController) Put() {
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Update successful", "Data": v}
 		} else {
 			logs.Error(err)
-			c.Data["message"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
+			c.Data["mesaage"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
 			c.Abort("400")
 		}
 	} else {
 		logs.Error(err)
-		c.Data["message"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
+		c.Data["mesaage"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
 		c.Abort("400")
 	}
 	c.ServeJSON()
@@ -189,7 +189,7 @@ func (c *ModificacionVinculacionController) Delete() {
 		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Delete successful", "Data": d}
 	} else {
 		logs.Error(err)
-		c.Data["message"] = "Error service Delete: Request contains incorrect parameter"
+		c.Data["mesaage"] = "Error service Delete: Request contains incorrect parameter"
 		c.Abort("404")
 	}
 	c.ServeJSON()

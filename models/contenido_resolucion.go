@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/astaxie/beego/logs"
@@ -53,7 +52,6 @@ func GetOneResolucionCompleta(idResolucion string) (resolucion ResolucionComplet
 	}
 
 	resolucionCompleta := ResolucionCompleta{Id: temp[0].Id, Consideracion: temp[0].ConsideracionResolucion, Preambulo: temp[0].PreambuloResolucion, Vigencia: temp[0].Vigencia, Numero: temp[0].NumeroResolucion, Titulo: temp[0].Titulo, CuadroResponsabilidades: temp[0].CuadroResponsabilidades}
-	fmt.Println("--------- ")
 	var arts []ComponenteResolucion
 	if _, err := o.QueryTable("componente_resolucion").Filter("resolucion_id", idRes).Filter("tipo_componente", "Articulo").OrderBy("numero").All(&arts); err != nil {
 		logs.Error(err)
@@ -101,14 +99,12 @@ func UpdateResolucionCompletaById(m *ResolucionCompleta) (outputError map[string
 		}
 	}()
 	o := orm.NewOrm()
-	fmt.Println("ESTO ES M: ", m)
 	v := Resolucion{Id: m.Id}
-	fmt.Println("Esto es v ", v)
 	if err := o.Read(&v); err == nil {
 		v.NumeroResolucion = m.Numero
 		v.FechaCreacion = time_bogota.TiempoCorreccionFormato(v.FechaCreacion)
 		v.FechaModificacion = time_bogota.TiempoBogotaFormato()
-		//v.Titulo = m.Titulo
+		v.Titulo = m.Titulo
 
 		if _, err := o.Update(&v); err != nil {
 			logs.Error(err)
@@ -122,10 +118,7 @@ func UpdateResolucionCompletaById(m *ResolucionCompleta) (outputError map[string
 	}
 	idResolucionStr := strconv.Itoa(m.Id)
 	r := m.Vinculacion
-	fmt.Println("Vinculacion ES: ", m.Vinculacion)
-	fmt.Println("R ES: ", r.Id)
 	a := ResolucionVinculacionDocente{Id: r.Id}
-	fmt.Println("PRUEBA DE QUE ES A ", a)
 	if err := o.Read(&a); err == nil {
 		if len(a.FechaCreacion) > 0 {
 			a.FechaCreacion = time_bogota.TiempoCorreccionFormato(a.FechaCreacion)

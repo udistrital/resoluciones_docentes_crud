@@ -47,12 +47,12 @@ func (c *ResolucionController) Post() {
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "201", "Message": "Registration successful", "Data": v}
 		} else {
 			logs.Error(err)
-			c.Data["message"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
+			c.Data["mesaage"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
 			c.Abort("400")
 		}
 	} else {
 		logs.Error(err)
-		c.Data["message"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
+		c.Data["mesaage"] = "Error service POST: The request contains an incorrect data type or an invalid parameter"
 		c.Abort("400")
 	}
 	c.ServeJSON()
@@ -71,7 +71,7 @@ func (c *ResolucionController) GetOne() {
 	v, err := models.GetResolucionById(id)
 	if err != nil {
 		logs.Error(err)
-		c.Data["message"] = "Error service GetOne: The request contains an incorrect parameter or no record exists"
+		c.Data["mesaage"] = "Error service GetOne: The request contains an incorrect parameter or no record exists"
 		c.Abort("404")
 	} else {
 		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": v}
@@ -88,7 +88,7 @@ func (c *ResolucionController) GetOne() {
 // @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
 // @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
-// @Success 200 {object} models.Resolucion
+// @Success 200 {object} []models.Resolucion
 // @Failure 404 not found resource
 // @router / [get]
 func (c *ResolucionController) GetAll() {
@@ -136,11 +136,11 @@ func (c *ResolucionController) GetAll() {
 	l, err := models.GetAllResolucion(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		logs.Error(err)
-		c.Data["message"] = "Error service GetAll: The request contains an incorrect parameter or no record exists"
+		c.Data["mesaage"] = "Error service GetAll: The request contains an incorrect parameter or no record exists"
 		c.Abort("404")
 	} else {
 		if l == nil {
-			l = append(l, map[string]interface{}{})
+			l = []interface{}{}
 		}
 		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": l}
 	}
@@ -166,12 +166,12 @@ func (c *ResolucionController) Put() {
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Update successful", "Data": v}
 		} else {
 			logs.Error(err)
-			c.Data["message"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
+			c.Data["mesaage"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
 			c.Abort("400")
 		}
 	} else {
 		logs.Error(err)
-		c.Data["message"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
+		c.Data["mesaage"] = "Error service Put: The request contains an incorrect data type or an invalid parameter"
 		c.Abort("400")
 	}
 	c.ServeJSON()
@@ -192,7 +192,7 @@ func (c *ResolucionController) Delete() {
 		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Delete successful", "Data": d}
 	} else {
 		logs.Error(err)
-		c.Data["message"] = "Error service Delete: Request contains incorrect parameter"
+		c.Data["mesaage"] = "Error service Delete: Request contains incorrect parameter"
 		c.Abort("404")
 	}
 	c.ServeJSON()
@@ -241,12 +241,12 @@ func (c *ResolucionController) RestaurarResolucion() {
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": v}
 		} else {
 			logs.Error(err)
-			c.Data["message"] = err.Error()
+			c.Data["mesaage"] = err.Error()
 			c.Abort("400")
 		}
 	} else {
 		logs.Error(err)
-		c.Data["message"] = err.Error()
+		c.Data["mesaage"] = err.Error()
 		c.Abort("403")
 	}
 	c.ServeJSON()
@@ -268,12 +268,12 @@ func (c *ResolucionController) GenerarResolucion() {
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "200", "Message": "Request successful", "Data": v}
 		} else {
 			logs.Error(err)
-			c.Data["message"] = err.Error()
+			c.Data["mesaage"] = err.Error()
 			c.Abort("400")
 		}
 	} else {
 		logs.Error(err)
-		c.Data["message"] = err.Error()
+		c.Data["mesaage"] = err.Error()
 		c.Abort("403")
 	}
 	c.ServeJSON()

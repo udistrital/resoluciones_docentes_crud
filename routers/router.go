@@ -1,7 +1,7 @@
-// @APIVersion 1.0.0
+// @APIVersion 1.1.0
 // @Title Resoluciones CRUD API
 // @Description Crud del aplicativo resoluciones, se usa para generar las resoluciones que afectan a los docentes de vinculacion especial, las cuales se usan para vincular, adicionar, reducir un contrato.
-// @Contact astaxie@gmail.com
+// @Contact computo@udistrital.edu.com
 // @TermsOfServiceUrl http://beego.me/
 // @License Apache 2.0
 // @LicenseUrl http://www.apache.org/licenses/LICENSE-2.0.html
