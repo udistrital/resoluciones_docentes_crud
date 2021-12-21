@@ -225,11 +225,11 @@ func AddConjuntoVinculaciones(m []VinculacionDocente) (id int64, err error) {
 		id, err = o.Insert(&vinculacion)
 		fmt.Println("id de vinculacion insertada", id)
 		if err != nil {
+			beego.Error(err)
 			err = o.Rollback()
 			if err != nil {
 				beego.Error(err)
 			}
-			return
 		}
 	}
 	err = o.Commit()

@@ -91,7 +91,7 @@ func (c *ResolucionVinculacionController) GetAll() {
 // @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..."
 // @Param	limit	query	int		false	"Limit the size of result set. Must be an integer"
 // @Param	offset	query	int		false	"Start position of result set. Must be an integer"
-// @Success 201 {object} models.ResolucionVinculacionDocente
+// @Success 201 {object} []models.ResolucionVinculacion
 // @Failure 403
 // @router /Aprobada [get]
 func (c *ResolucionVinculacionController) GetAllAprobada() {
@@ -151,8 +151,8 @@ func (c *ResolucionVinculacionController) GetAllAprobada() {
 // GetAllExpedidasVigenciaPeriodo ...
 // @Title GetAllExpedidasVigenciaPeriodo
 // @Description Agrupa los contratos de una preliquidacion segun mes, año y nomina para preliquidaicones en estado CERRADA
-// @Param vigencia query string false "nomina a listar"
-// @Success 201 {object} models.Preliquidacion_x_contratos
+// @Param vigencia query string true "nomina a listar"
+// @Success 201 {object} []models.ResolucionVinculacion
 // @Failure 403 body is empty
 // @router /expedidas_vigencia_periodo [get]
 func (c *ResolucionVinculacionController) GetAllExpedidasVigenciaPeriodo() {
@@ -178,7 +178,7 @@ func (c *ResolucionVinculacionController) GetAllExpedidasVigenciaPeriodo() {
 // @Title GetAllExpedidasVigenciaPeriodoVinculacion
 // @Description Muestra resoluciones de tipo vinculación para cancelar y modificar
 // @Param vigencia query string false "nomina a listar"
-// @Success 201 {object} models.Preliquidacion_x_contratos
+// @Success 201 {object} []models.ResolucionVinculacion
 // @Failure 403 body is empty
 // @router /expedidas_vigencia_periodo_vinculacion [get]
 func (c *ResolucionVinculacionController) GetAllExpedidasVigenciaPeriodoVinculacion() {
@@ -205,7 +205,7 @@ func (c *ResolucionVinculacionController) GetAllExpedidasVigenciaPeriodoVinculac
 	if err := recover(); err != nil {
 		logs.Error(err)
 		localError := err.(map[string]interface{})
-		c.Data["message"] = (beego.AppConfig.String("appname") + "/" + "ResolucionVinculacionController" + "/" + (localError["funcion"]).(string))
+		c.Data["mesaage"] = (beego.AppConfig.String("appname") + "/" + "ResolucionVinculacionController" + "/" + (localError["funcion"]).(string))
 		c.Data["data"] = (localError["err"])
 		if status, ok := localError["status"]; ok {
 			c.Abort(status.(string))
@@ -219,8 +219,7 @@ func ErrorControl(c beego.Controller, controller string) {
 	if err := recover(); err != nil {
 		logs.Error(err)
 		localError := err.(map[string]interface{})
-		c.Data["message"] = (beego.AppConfig.String("appname") + "/" + controller + "/" + (localError["funcion"]).(string))
-		//fmt.Println(c.Data["message"])
+		c.Data["mesaage"] = (beego.AppConfig.String("appname") + "/" + controller + "/" + (localError["funcion"]).(string))
 		c.Data["data"] = (localError["err"])
 		if status, ok := localError["status"]; ok {
 			c.Abort(status.(string))
